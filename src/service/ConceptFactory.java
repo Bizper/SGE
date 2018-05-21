@@ -2,6 +2,7 @@ package service;
 
 import impl.Unit;
 import intf.Concept;
+import util.ConfigUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +17,22 @@ public class ConceptFactory {
 
     private static int cursor = 0;//当前使用的实例数量
 
+    private static Class<Concept> DEFAULT_CLASS;
+
     static {
+        DEFAULT_CLASS = ConfigUtil.getDefaultModel();
         for(int i=0; i<CURRENT_SIZE; i++) {
-            pool.add(new Unit());
+            pool.add(getModel());
         }
+    }
+
+    public synchronized static Concept getModel() {
+        try {
+            return DEFAULT_CLASS.getConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public synchronized static Concept getInstance() {
@@ -42,7 +55,7 @@ public class ConceptFactory {
     }
 
     private synchronized static Concept getNewInstance() {
-        Concept concept = new Unit();
+        Concept concept = getModel();
         concept.create();
         Proc.register(concept);
         return concept;
