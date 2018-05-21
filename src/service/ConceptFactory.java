@@ -76,7 +76,7 @@ public class ConceptFactory {
 
     public static void printAll() {
         for(Concept concept : pool) {
-            System.out.println("ConceptFactory [" + concept + "=" + concept.getID() + "]");
+            System.out.println("ConceptFactory [" + concept + " id=" + concept.getID() + "]");
         }
     }
 

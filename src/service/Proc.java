@@ -41,9 +41,11 @@ public class Proc implements DefaultConstant {
     }
 
     public static void print() {
+        StringBuilder stringBuffer = new StringBuilder();
         for(Map.Entry<Integer, Concept> e : list.entrySet()) {
-            System.out.println("Proc [" + e.getKey() + "=" + e.getValue() + "]");
+            stringBuffer.append("Proc [").append(e.getKey()).append("=").append(e.getValue()).append("]\n");
         }
+        System.out.println(stringBuffer.toString());
     }
 
 }

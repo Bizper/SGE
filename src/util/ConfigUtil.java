@@ -24,7 +24,6 @@ public class ConfigUtil {
 
     public static <T extends Concept> Class<T> getDefaultModel() {
         String classUrl = prop.getProperty("default.model");
-        System.out.println(classUrl);
         return (Class<T>) Unit.class;
     }
 
