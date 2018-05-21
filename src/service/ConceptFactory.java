@@ -1,6 +1,5 @@
 package service;
 
-import impl.Unit;
 import intf.Concept;
 import util.ConfigUtil;
 
@@ -26,7 +25,7 @@ public class ConceptFactory {
         }
     }
 
-    public synchronized static Concept getModel() {
+    private synchronized static Concept getModel() {
         try {
             return DEFAULT_CLASS.getConstructor().newInstance();
         } catch (Exception e) {
