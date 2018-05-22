@@ -239,4 +239,25 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
         onSpell();
         return this;
     }
+
+    @Override
+    public void onDestroy() { }
+
+    @Override
+    public void onCreate() { }
+
+    @Override
+    public void onFlush() { }
+
+    @Override
+    public void onPaint() { }
+
+    @Override
+    public void onAttack() { }
+
+    @Override
+    public void onMove() { }
+
+    @Override
+    public void onSpell() { }
 }

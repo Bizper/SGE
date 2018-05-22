@@ -14,7 +14,7 @@ public class Main {
 
         ConceptFactory.printAll();
 
-        Proc.print();
+        Proc.printAll();
 
     }
 

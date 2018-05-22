@@ -58,10 +58,10 @@ public interface GameUnit {
 
     GameUnit spell(int index, GameUnit target);
 
-    GameUnit onAttack();
+    void onAttack();
 
-    GameUnit onMove();
+    void onMove();
 
-    GameUnit onSpell();
+    void onSpell();
 
 }

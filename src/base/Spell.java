@@ -44,4 +44,15 @@ public abstract class Spell implements Concept, DefaultConstant {
         return this;
     }
 
+    @Override
+    public void onDestroy() { }
+
+    @Override
+    public void onCreate() { }
+
+    @Override
+    public void onFlush() { }
+
+    @Override
+    public void onPaint() { }
 }
