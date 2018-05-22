@@ -2,6 +2,10 @@ package intf;
 
 public interface Concept {
 
+    Concept setName(String name);
+
+    String getName();
+
     int getID();
 
     Concept setID(int id);

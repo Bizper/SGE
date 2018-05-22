@@ -1,6 +1,5 @@
 package util;
 
-import impl.Unit;
 import intf.Concept;
 
 import java.io.IOException;
@@ -24,7 +23,7 @@ public class ConfigUtil {
 
     public static <T extends Concept> Class<T> getDefaultModel() {
         String classUrl = prop.getProperty("default.model");
-        return (Class<T>) Unit.class;
+        return (Class<T>) impl.person.Character.class;
     }
 
 }

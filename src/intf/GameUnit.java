@@ -16,10 +16,6 @@ public interface GameUnit {
 
     int getMp();
 
-    String getName();
-
-    GameUnit setName(String name);
-
     int getLevel();
 
     GameUnit setLevel(int level);

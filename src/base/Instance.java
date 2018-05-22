@@ -128,7 +128,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
     }
 
     @Override
-    public GameUnit setName(String name) {
+    public Concept setName(String name) {
         this.name = name;
         onFlush();
         return this;
