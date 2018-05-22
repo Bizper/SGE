@@ -2,6 +2,7 @@ package base;
 
 import constant.DefaultConstant;
 import constant.StatusType;
+import impl.Spell;
 import intf.Concept;
 import intf.GameUnit;
 import service.ConceptFactory;
