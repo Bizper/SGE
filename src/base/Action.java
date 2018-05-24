@@ -97,31 +97,34 @@ public abstract class Action implements Concept, GameAction, DefaultConstant {
 
     @Override
     public void cast(GameUnit trigger, GameUnit target) {
+        if(target_action == null) return;
         target_action.action(trigger, target);
         onFlush();
     }
 
     @Override
     public void cast(GameUnit trigger, int x, int y, int radius) {
+        if(range_action == null) return;
         range_action.action(trigger, x, y, radius);
         onFlush();
     }
 
     public void cast(GameUnit trigger) {
+        if(self_action == null) return;
         self_action.action(trigger);
         onFlush();
     }
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("Action{");
+        final StringBuffer sb = new StringBuffer("Action [");
         sb.append("target_action=").append(target_action);
         sb.append(", range_action=").append(range_action);
         sb.append(", self_action=").append(self_action);
         sb.append(", name='").append(name).append('\'');
         sb.append(", ID=").append(ID);
         sb.append(", isUsed=").append(isUsed);
-        sb.append('}');
+        sb.append(']');
         return sb.toString();
     }
 

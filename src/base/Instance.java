@@ -7,7 +7,10 @@ import intf.Concept;
 import intf.GameUnit;
 import service.ConceptFactory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class Instance implements Concept, GameUnit, DefaultConstant {
 
@@ -23,7 +26,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
     protected int moveSpeed = DEFAULT_MOVE_SPEED;
     protected int x = 0;
     protected int y = 0;
-    protected Spell spell_list[] = new Spell[MAX_SPELL_NUMBER];
+    protected List<Spell> spell_list = new ArrayList<>(MAX_SPELL_NUMBER);
 
     protected int ID = DEFAULT_ID;
 
@@ -65,6 +68,25 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
         this.x = x;
         this.y = y;
         onFlush();
+        return this;
+    }
+
+    public StatusType getType() {
+        return default_type;
+    }
+
+    public GameUnit setType(StatusType default_type) {
+        this.default_type = default_type;
+        return this;
+    }
+
+    public Spell[] getSpellList() {
+        Spell spells[] = new Spell[spell_list.size()];
+        return spell_list.toArray(spells);
+    }
+
+    public GameUnit setSpellList(Spell list[]) {
+        this.spell_list = Arrays.asList(list);
         return this;
     }
 
@@ -121,6 +143,22 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
         if(mp > maxMp) mp = maxMp;
         this.mp = mp;
         onFlush();
+        return this;
+    }
+
+    @Override
+    public GameUnit addSpell(Spell spell) {
+        spell_list.add(spell);
+        return this;
+    }
+
+    public GameUnit removeSpell(Spell spell) {
+        spell_list.remove(spell);
+        return this;
+    }
+
+    public GameUnit removeSpell(int index) {
+        spell_list.remove(index);
         return this;
     }
 
@@ -237,11 +275,13 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
 
     @Override
     public GameUnit spell(int num, GameUnit target) {
-        if(num < 0 || num >= MAX_SPELL_NUMBER || spell_list[num] == null) return this;
-        spell_list[num].cast(this, target);
+        if(num < 0 || num >= MAX_SPELL_NUMBER) return this;
+        spell_list.get(num).cast(this, target);
         onSpell();
         return this;
     }
+
+
 
     @Override
     public void onDestroy() { }

@@ -1,6 +1,7 @@
 package intf;
 
 import constant.StatusType;
+import impl.action.Spell;
 
 public interface GameUnit {
 
@@ -39,6 +40,20 @@ public interface GameUnit {
     int getMaxHp();
 
     int getMaxMp();
+
+    StatusType getType();
+
+    GameUnit addSpell(Spell spell);
+
+    GameUnit removeSpell(Spell spell);
+
+    GameUnit removeSpell(int index);
+
+    GameUnit setType(StatusType default_type);
+
+    Spell[] getSpellList();
+
+    GameUnit setSpellList(Spell list[]);
 
     GameUnit setMaxHp(int hp);
 
