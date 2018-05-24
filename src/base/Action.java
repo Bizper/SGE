@@ -5,6 +5,7 @@ import intf.Concept;
 import intf.GameAction;
 import intf.GameUnit;
 import intf.action.RangeOperation;
+import intf.action.SelfOperation;
 import intf.action.TargetOperation;
 import service.ConceptFactory;
 
@@ -13,6 +14,8 @@ public abstract class Action implements Concept, GameAction, DefaultConstant {
     private TargetOperation<GameUnit> target_action;
 
     private RangeOperation<GameUnit, Integer> range_action;
+
+    private SelfOperation<GameUnit> self_action;
 
     private String name = DEFAULT_NAME;
 
@@ -87,6 +90,12 @@ public abstract class Action implements Concept, GameAction, DefaultConstant {
     }
 
     @Override
+    public GameAction setAction(SelfOperation<GameUnit> so) {
+        this.self_action = so;
+        return this;
+    }
+
+    @Override
     public void cast(GameUnit trigger, GameUnit target) {
         target_action.action(trigger, target);
         onFlush();
@@ -97,4 +106,23 @@ public abstract class Action implements Concept, GameAction, DefaultConstant {
         range_action.action(trigger, x, y, radius);
         onFlush();
     }
+
+    public void cast(GameUnit trigger) {
+        self_action.action(trigger);
+        onFlush();
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Action{");
+        sb.append("target_action=").append(target_action);
+        sb.append(", range_action=").append(range_action);
+        sb.append(", self_action=").append(self_action);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", ID=").append(ID);
+        sb.append(", isUsed=").append(isUsed);
+        sb.append('}');
+        return sb.toString();
+    }
+
 }

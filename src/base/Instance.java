@@ -2,30 +2,32 @@ package base;
 
 import constant.DefaultConstant;
 import constant.StatusType;
-import impl.Spell;
+import impl.action.Spell;
 import intf.Concept;
 import intf.GameUnit;
 import service.ConceptFactory;
 
+import java.util.Arrays;
+
 public abstract class Instance implements Concept, GameUnit, DefaultConstant {
 
-    private int hp = DEFAULT_HP;
-    private int maxHp = DEFAULT_HP;
-    private int mp = DEFAULT_MP;
-    private int maxMp = DEFAULT_MP;
-    private int attack = DEFAULT_ATTACK;
-    private int defence = DEFAULT_DEFENCE;
-    private StatusType default_type = DEFAULT_STATUS;
-    private String name = DEFAULT_NAME;
-    private int level = DEFAULT_LEVEL;
-    private int moveSpeed = DEFAULT_MOVE_SPEED;
-    private int x = 0;
-    private int y = 0;
-    private Spell spell_list[] = new Spell[MAX_SPELL_NUMBER];
+    protected int hp = DEFAULT_HP;
+    protected int maxHp = DEFAULT_HP;
+    protected int mp = DEFAULT_MP;
+    protected int maxMp = DEFAULT_MP;
+    protected int attack = DEFAULT_ATTACK;
+    protected int defence = DEFAULT_DEFENCE;
+    protected StatusType default_type = DEFAULT_STATUS;
+    protected String name = DEFAULT_NAME;
+    protected int level = DEFAULT_LEVEL;
+    protected int moveSpeed = DEFAULT_MOVE_SPEED;
+    protected int x = 0;
+    protected int y = 0;
+    protected Spell spell_list[] = new Spell[MAX_SPELL_NUMBER];
 
-    private int ID = DEFAULT_ID;
+    protected int ID = DEFAULT_ID;
 
-    private boolean isUsed = false;//判断当前实例是否被使用
+    protected boolean isUsed = false;//判断当前实例是否被使用
 
     @Override
     public int getAttack() {
@@ -261,4 +263,25 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
 
     @Override
     public void onSpell() { }
+
+    @Override
+    public String toString() {
+        return "Instance [" +
+                "hp=" + hp +
+                ", maxHp=" + maxHp +
+                ", mp=" + mp +
+                ", maxMp=" + maxMp +
+                ", attack=" + attack +
+                ", defence=" + defence +
+                ", default_type=" + default_type +
+                ", name='" + name + '\'' +
+                ", level=" + level +
+                ", moveSpeed=" + moveSpeed +
+                ", x=" + x +
+                ", y=" + y +
+                ", spell_list=" + (spell_list == null ? null : Arrays.asList(spell_list)) +
+                ", ID=" + ID +
+                ", isUsed=" + isUsed +
+                ']';
+    }
 }

@@ -1,5 +1,7 @@
 package constant;
 
+import intf.Concept;
+
 public interface DefaultConstant {
 
     int DEFAULT_ID = -1;
@@ -39,5 +41,7 @@ public interface DefaultConstant {
     double DEFAULT_DEFENCE_SENSOR = 0.06;
 
     StatusType DEFAULT_STATUS = StatusType.STATUS_DEFAULT;
+
+    Class<? extends Concept> DEFAULT_CLASS = impl.person.Character.class;
 
 }

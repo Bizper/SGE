@@ -1,12 +1,13 @@
 package util;
 
+import constant.DefaultConstant;
 import intf.Concept;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class ConfigUtil {
+public class ConfigUtil implements DefaultConstant {
 
     static Properties prop = new Properties();
 
@@ -21,9 +22,25 @@ public class ConfigUtil {
         }
     }
 
-    public static <T extends Concept> Class<T> getDefaultModel() {
+    public static Class<? extends Concept> getDefaultModel() {
         String classUrl = prop.getProperty("default.model");
-        return (Class<T>) impl.person.Character.class;
+        Class<?> cls = DEFAULT_CLASS;//default model
+        try {
+            cls = ClassLoader.getSystemClassLoader().loadClass(classUrl);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return (Class<? extends Concept>) cls;
+    }
+
+    public static String getValue(String key) {
+        return prop.getProperty(key);
+    }
+
+    public static int getValueAsInt(String key) {
+        String value = prop.getProperty(key);
+        if(value == null || value.isEmpty()) return 0;
+        else return Integer.parseInt(value);
     }
 
 }

@@ -10,19 +10,16 @@ public class ConceptFactory {
 
     private static int DEFAULT_SIZE = 10;//默认实例池大小
 
-    private static int CURRENT_SIZE = DEFAULT_SIZE;
+    private static int CURRENT_SIZE = 0;
 
     private static List<Concept> pool = new ArrayList<>(DEFAULT_SIZE);//实例池
 
     private static int cursor = 0;//当前使用的实例数量
 
-    private static Class<Concept> DEFAULT_CLASS;
+    private static Class<? extends Concept> DEFAULT_CLASS;
 
     static {
         DEFAULT_CLASS = ConfigUtil.getDefaultModel();
-        for(int i=0; i<CURRENT_SIZE; i++) {
-            pool.add(getModel());
-        }
     }
 
     private synchronized static Concept getModel() {
@@ -34,7 +31,8 @@ public class ConceptFactory {
         return null;
     }
 
-    public synchronized static Concept getInstance() {
+    public synchronized static Concept getInstance(Class<? extends Concept> cls) {
+        DEFAULT_CLASS = cls;
         if(cursor >= CURRENT_SIZE) {//检查当前游标是否超限，超限的话直接返回新建的实例
             return getNewInstance();
         }
@@ -71,12 +69,12 @@ public class ConceptFactory {
     }
 
     public static String asString() {
-        return "ConceptFactory [" + "size=" + CURRENT_SIZE + " cursor=" + cursor + "]";
+        return "ConceptFactory [" + "size=" + CURRENT_SIZE + ", cursor=" + cursor + "]";
     }
 
     public static void printAll() {
         for(Concept concept : pool) {
-            System.out.println("ConceptFactory [" + concept + " id=" + concept.getID() + "]");
+            System.out.println("ConceptFactory [" + concept + "]");
         }
     }
 

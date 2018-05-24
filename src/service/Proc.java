@@ -43,7 +43,7 @@ public class Proc implements DefaultConstant {
     public static void printAll() {
         StringBuilder stringBuffer = new StringBuilder();
         for(Map.Entry<Integer, Concept> e : list.entrySet()) {
-            stringBuffer.append("Proc [").append(e.getKey()).append("=").append(e.getValue()).append("]\n");
+            stringBuffer.append("Proc [").append(e.getValue()).append("]\n");
         }
         System.out.println(stringBuffer.toString());
     }
