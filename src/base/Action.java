@@ -11,17 +11,17 @@ import service.ConceptFactory;
 
 public abstract class Action implements Concept, GameAction, DefaultConstant {
 
-    private TargetOperation<GameUnit> target_action;
+    protected TargetOperation<GameUnit> target_action;
 
-    private RangeOperation<GameUnit, Integer> range_action;
+    protected RangeOperation<GameUnit, Integer> range_action;
 
-    private SelfOperation<GameUnit> self_action;
+    protected SelfOperation<GameUnit> self_action;
 
-    private String name = DEFAULT_NAME;
+    protected String name = DEFAULT_NAME;
 
-    private int ID = DEFAULT_ID;
+    protected int ID = DEFAULT_ID;
 
-    private boolean isUsed = false;
+    protected boolean isUsed = false;
 
     public Concept setName(String name) {
         this.name = name;
