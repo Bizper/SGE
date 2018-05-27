@@ -17,7 +17,7 @@ public class Main {
         spell.setName("火球术");
         spell.setAction((sel, tar) -> {
             tar.hurt(50);
-            sel.setMp(sel.getMp() - 50);
+            sel.setMp(sel.getMp() - 10);
         });
 
         main.addSpell(spell);

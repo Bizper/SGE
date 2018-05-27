@@ -8,8 +8,8 @@ import mapping.SCE;
  */
 public class MapLoader {
 
-    public static SCE load() {
-        return FileScanner.searchForSCE();
+    public static SCE load(String path) {
+        return FileScanner.searchForSCE(path);
     }
 
 }

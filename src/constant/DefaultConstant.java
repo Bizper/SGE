@@ -42,6 +42,8 @@ public interface DefaultConstant {
 
     StatusType DEFAULT_STATUS = StatusType.STATUS_DEFAULT;
 
+    int MAX_MAP_SIZE = 100;
+
     Class<? extends Concept> DEFAULT_CLASS = impl.person.Character.class;
 
 }

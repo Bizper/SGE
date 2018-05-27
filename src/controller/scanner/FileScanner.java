@@ -9,18 +9,19 @@ import mapping.SCE;
  */
 public class FileScanner {
 
-    private static String file_path = "";
+    private static String filePath = "";
 
-    public static SCE searchForSCE() {
-        return null;
+    static SCE searchForSCE(String path) {
+        filePath = path;
+        return FileParser.parseSCE(path + "main.sce");
     }
 
     public static PLR searchForPLR() {
         return null;
     }
 
-    private static MP includeMP() {
-        return null;
+    private static MP includeMP(String path) {
+        return FileParser.parseMP(path);
     }
 
 }
