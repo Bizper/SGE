@@ -22,7 +22,7 @@ public class ConfigUtil implements DefaultConstant {
         }
     }
 
-    public static Class<? extends Concept> getDefaultModel() {
+    public static Class getDefaultModel() {
         String classUrl = prop.getProperty("default.model");
         Class<?> cls = DEFAULT_CLASS;//default model
         try {
@@ -30,7 +30,7 @@ public class ConfigUtil implements DefaultConstant {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return (Class<? extends Concept>) cls;
+        return cls;
     }
 
     public static String getValue(String key) {

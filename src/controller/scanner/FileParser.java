@@ -3,13 +3,13 @@ package controller.scanner;
 import constant.DefaultConstant;
 import mapping.*;
 import mapping.inside.Block;
+import util.Log;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 
 public class FileParser {
+
+    private static Log log = Log.getInstance(FileParser.class);
 
     private static BufferedReader br;
     private static BufferedWriter bw;
@@ -19,32 +19,83 @@ public class FileParser {
 
     private static double progress = MIN_PROGRESS;
 
-    public static SCE parseSCE(String path) {
+    private static BufferedReader init(File f) {
+        try {
+            return new BufferedReader(new FileReader(f));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         return null;
+    }
+
+    public static SCE parseSCE(String path) {
+        SCE sce = null;
+        File f = new File(path);
+        if(!path.endsWith(".sce")) {
+            log.error("not current SCE file. check your file location.");
+            return null;
+        }
+        setProgress(MIN_PROGRESS);
+        String str;
+        String name;
+        br = init(f);
+        if(br == null) return null;
+        try {
+            while((str = br.readLine()) != null) {
+                System.out.println(str);
+            }
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
+        setProgress(MAX_PROGRESS);
+        return sce;
     }
 
     public static PLR parsePLR(String path) {
-        return null;
+        PLR plr = null;
+        File f = new File(path);
+        if(!path.endsWith(".plr")) {
+            log.error("not current PLR file. check your file location.");
+            return null;
+        }
+        setProgress(MIN_PROGRESS);
+        String str;
+        String name;
+        br = init(f);
+        if(br == null) return null;
+        try {
+            while((str = br.readLine()) != null) {
+                System.out.println(str);
+            }
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
+        setProgress(MAX_PROGRESS);
+        return plr;
     }
 
     public static MP parseMP(String path) {
-        MP mp;
+        MP mp = null;
         File f = new File(path);
-        try {
-            setProgress(MIN_PROGRESS);
-            String name;
-            Block list[][] = new Block[DefaultConstant.MAX_MAP_SIZE][DefaultConstant.MAX_MAP_SIZE];
-            String str;
-            br = new BufferedReader(new FileReader(f));
-            while((str = br.readLine()) != null) {
-                //TODO
-            }
-            setProgress(MAX_PROGRESS);
-        } catch(Exception e) {
-            e.printStackTrace();
-        } finally {
-            mp = null;
+        if(!path.endsWith(".mp")) {
+            log.error("not current MP file. check your file location.");
+            return null;
         }
+        setProgress(MIN_PROGRESS);
+        String name = "";
+        Block list[][] = new Block[DefaultConstant.MAX_MAP_SIZE][DefaultConstant.MAX_MAP_SIZE];
+        String str;
+        br = init(f);
+        if(br == null) return null;
+        try {
+            while((str = br.readLine()) != null) {
+                System.out.println(str);
+            }
+            mp = new MP(name, list);
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
+        setProgress(MAX_PROGRESS);
         return mp;
     }
 

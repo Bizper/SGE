@@ -1,5 +1,6 @@
 package controller.scanner;
 
+import controller.scanner.error.TypeErrorException;
 import mapping.SCE;
 
 

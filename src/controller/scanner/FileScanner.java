@@ -1,5 +1,6 @@
 package controller.scanner;
 
+import controller.scanner.error.TypeErrorException;
 import mapping.MP;
 import mapping.PLR;
 import mapping.SCE;
@@ -11,16 +12,16 @@ public class FileScanner {
 
     private static String filePath = "";
 
-    static SCE searchForSCE(String path) {
+    public static SCE searchForSCE(String path) {
         filePath = path;
         return FileParser.parseSCE(path + "main.sce");
     }
 
-    public static PLR searchForPLR() {
-        return null;
+    public static PLR searchForPLR(String path) {
+        return FileParser.parsePLR(path);
     }
 
-    private static MP includeMP(String path) {
+    public static MP searchForMP(String path) {
         return FileParser.parseMP(path);
     }
 

@@ -2,6 +2,7 @@ package service;
 
 import constant.DefaultConstant;
 import intf.Concept;
+import util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Proc implements DefaultConstant {
+
+    private static Log log = Log.getInstance(Proc.class);
 
     private static int ID = DEFAULT_ID + 1;
 
@@ -41,11 +44,15 @@ public class Proc implements DefaultConstant {
     }
 
     public static void printAll() {
-        StringBuilder stringBuffer = new StringBuilder();
+        StringBuilder str = new StringBuilder();
         for(Map.Entry<Integer, Concept> e : list.entrySet()) {
-            stringBuffer.append("Proc [").append(e.getValue()).append("]\n");
+            str.append("Proc [");
+            str.append(e.getValue());
+            str.append("]");
+            log.log(str.toString());
+            str.delete(0, str.length());
         }
-        System.out.println(stringBuffer.toString());
+
     }
 
 }
