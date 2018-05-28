@@ -19,28 +19,37 @@ public class Proc implements DefaultConstant {
 
     private static Map<Integer, Concept> list = new HashMap<>();
 
-    public synchronized static Concept findConceptByID(int id) {
+    public synchronized static Concept get(int id) {
         return list.get(id);
     }
 
-    public synchronized static Concept register(Concept concept) {
+    synchronized static int register(Concept concept) {
+        int localID = ID;
         if(empty.size() > 0) {
-            list.put(empty.get(empty.size() - 1), concept);
-            concept.setID(empty.get(empty.size() - 1));
+            localID = empty.get(empty.size() - 1);
+            list.put(localID, concept);
+            concept.setID(localID);
             empty.remove(empty.size() - 1);
-            return concept;
+            return localID;
         }
-        list.put(ID, concept);
-        concept.setID(ID);
-        ID ++;
-        return concept;
+        list.put(localID, concept);
+        concept.setID(localID);
+        IDPlus();
+        return localID;
     }
 
-    public synchronized static Concept logout(Concept concept) {
+    private synchronized static void IDPlus() {
+        ID ++;
+    }
+
+    synchronized static void logout(Concept concept) {
         list.remove(concept.getID(), concept);
         empty.add(concept.getID());
         concept.setID(DEFAULT_ID);
-        return concept;
+        /**
+         * in case of
+         */
+        System.gc();
     }
 
     public static void printAll() {

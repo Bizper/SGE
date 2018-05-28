@@ -1,7 +1,9 @@
 package base;
 
 import constant.DefaultConstant;
+import constant.EventType;
 import constant.StatusType;
+import impl.Item;
 import impl.action.Spell;
 import intf.Concept;
 import intf.GameUnit;
@@ -24,9 +26,13 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
     protected String name = DEFAULT_NAME;
     protected int level = DEFAULT_LEVEL;
     protected int moveSpeed = DEFAULT_MOVE_SPEED;
+    protected GameUnit owner = null;
+    protected int packSize = DEFAULT_PACK_SIZE;
     protected int x = 0;
     protected int y = 0;
     protected List<Spell> spell_list = new ArrayList<>(MAX_SPELL_NUMBER);
+    protected Item pack[] = new Item[DEFAULT_PACK_SIZE];
+    private int pack_usage = 0;
 
     protected int ID = DEFAULT_ID;
 
@@ -56,6 +62,47 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
         this.defence = defence;
         onFlush();
         return this;
+    }
+
+    public int getPackSize() {
+        return packSize;
+    }
+
+    public GameUnit setPackSize(int packSize) {
+        this.packSize = packSize;
+        return this;
+    }
+
+    public int[] getPack() {
+        int items[] = new int[pack.length];
+        for(int i=0; i<pack.length; i++) {
+            items[i] = pack[i].getID();
+        }
+        return items;
+    }
+
+    @Override
+    public EventType removeItem(int num) {
+        if(pack_usage <= 0) return EventType.PACK_EMPTY;
+        pack[num] = null;
+        pack_usage --;
+        return EventType.PACK_REMOVE_SUCCESS;
+    }
+
+    public EventType addItem(Item item) {
+        if(pack_usage >= packSize) return EventType.PACK_FULL;
+        return null;
+    }
+
+    @Override
+    public GameUnit setOwner(GameUnit unit) {
+        this.owner = unit;
+        return this;
+    }
+
+    @Override
+    public GameUnit getOwner() {
+        return owner;
     }
 
     @Override
@@ -281,7 +328,9 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
         return this;
     }
 
-
+    /**
+     * HOOK METHOD
+     */
 
     @Override
     public void onDestroy() { }

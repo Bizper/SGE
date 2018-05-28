@@ -1,6 +1,8 @@
 package intf;
 
+import constant.EventType;
 import constant.StatusType;
+import impl.Item;
 import impl.action.Spell;
 
 public interface GameUnit {
@@ -27,9 +29,23 @@ public interface GameUnit {
 
     StatusType getStatus();
 
+    int[] getPack();
+
+    int getPackSize();
+
+    GameUnit setPackSize(int packSize);
+
+    EventType addItem(Item item);
+
+    EventType removeItem(int num);
+
     GameUnit setStatus(StatusType type);
 
     int getAttack();
+
+    GameUnit setOwner(GameUnit unit);
+
+    GameUnit getOwner();
 
     GameUnit setAttack(int attack);
 

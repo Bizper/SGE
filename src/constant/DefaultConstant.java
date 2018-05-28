@@ -1,7 +1,5 @@
 package constant;
 
-import intf.Concept;
-
 public interface DefaultConstant {
 
     int DEFAULT_ID = -1;
@@ -24,6 +22,8 @@ public interface DefaultConstant {
 
     String DEFAULT_NAME = "";
 
+    int DEFAULT_PACK_SIZE = 40;
+
     int MIN_LEVEL = 0;
 
     int DEFAULT_LEVEL = 0;
@@ -44,6 +44,23 @@ public interface DefaultConstant {
 
     int MAX_MAP_SIZE = 100;
 
-    Class<? extends Concept> DEFAULT_CLASS = impl.person.Character.class;
+    /**
+     * WINDOWS PROPERTIES
+     */
+    int WIN_X = 200;
+
+    int WIN_Y = 200;
+
+    int WIN_WIDTH = 1024;
+
+    int WIN_HEIGHT = 768;
+
+    String DEFAULT_TITLE = "MUD GAME";
+
+    /**
+     * THREAD PROPERTIES
+     */
+
+    int FRAME_PER_SECOND = 60;
 
 }

@@ -2,6 +2,7 @@ package service;
 
 import intf.Concept;
 import util.ConfigUtil;
+import util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,23 +19,30 @@ public class ConceptFactory {
 
     private static Class<?> DEFAULT_CLASS;
 
+    private static Log log = Log.getInstance(ConceptFactory.class);
+
     static {
-        DEFAULT_CLASS = ConfigUtil.getDefaultModel();
+        DEFAULT_CLASS = getDefaultModel();
     }
 
+    /**
+     * 获取默认的model
+     * @return
+     */
     private synchronized static Object getModel() {
         try {
             return DEFAULT_CLASS.getConstructor().newInstance();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
         }
         return null;
     }
 
-    public synchronized static <T> T getInstance(Class<T> cls) {
+    public synchronized static <T> int getInstance(Class<T> cls) {
+        log.log("receive model: " + cls);
         DEFAULT_CLASS = cls;
         if(cursor >= CURRENT_SIZE) {//检查当前游标是否超限，超限的话直接返回新建的实例
-            return (T) getNewInstance();
+            return getNewInstance();
         }
         Concept concept = pool.get(cursor);//获得当前游标的实例
         int local_cursor = 0;//创建本地游标
@@ -42,20 +50,19 @@ public class ConceptFactory {
             concept = pool.get(local_cursor);//根据本地游标开始获取实例
             local_cursor ++;//本地游标增加
             if(local_cursor >= CURRENT_SIZE) {//如果遍历完成后发现全都被使用了，直接返回新建的实例
-                return (T) getNewInstance();
+                return getNewInstance();
             }
         }
         concept.create();//标记为已经使用
         cursor ++;//游标加1
-        Proc.register(concept);
-        return (T) concept;
+        return Proc.register(concept);
     }
 
-    private synchronized static Concept getNewInstance() {
+    private synchronized static int getNewInstance() {
         Concept concept = (Concept) getModel();
         concept.create();
-        Proc.register(concept);
-        return concept;
+        log.log("creating model: " + concept);
+        return Proc.register(concept);
     }
 
     public synchronized static void receive(Concept concept) {
@@ -68,13 +75,25 @@ public class ConceptFactory {
         Proc.logout(concept);
     }
 
-    public static String asString() {
-        return "ConceptFactory [" + "size=" + CURRENT_SIZE + ", cursor=" + cursor + "]";
+    private synchronized static Class getDefaultModel() {
+        String classUrl = ConfigUtil.getValue("default.model");
+        Class<?> cls = null;//default model
+        try {
+            log.log("scanning folders for " + classUrl);
+            cls = ClassLoader.getSystemClassLoader().loadClass(classUrl);
+        } catch (ClassNotFoundException e) {
+            log.error(e);
+        }
+        return cls;
+    }
+
+    public static void print() {
+        log.log("size=" + CURRENT_SIZE + ", cursor=" + cursor);
     }
 
     public static void printAll() {
         for(Concept concept : pool) {
-            System.out.println("ConceptFactory [" + concept + "]");
+            log.log(concept);
         }
     }
 
