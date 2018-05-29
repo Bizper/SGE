@@ -1,6 +1,7 @@
 package controller.scanner;
 
 import mapping.SCE;
+import util.Log;
 
 
 /**
@@ -8,7 +9,10 @@ import mapping.SCE;
  */
 public class MapLoader {
 
+    private static Log log = Log.getInstance(MapLoader.class);
+
     public static SCE load(String path) {
+        log.log("load SCE file from " + path);
         return FileScanner.searchForSCE(path);
     }
 

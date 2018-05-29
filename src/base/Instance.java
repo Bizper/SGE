@@ -3,7 +3,6 @@ package base;
 import constant.DefaultConstant;
 import constant.EventType;
 import constant.StatusType;
-import impl.Item;
 import impl.action.Spell;
 import intf.Concept;
 import intf.GameUnit;
@@ -11,7 +10,6 @@ import service.ConceptFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public abstract class Instance implements Concept, GameUnit, DefaultConstant {
@@ -27,11 +25,11 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
     protected int level = DEFAULT_LEVEL;
     protected int moveSpeed = DEFAULT_MOVE_SPEED;
     protected GameUnit owner = null;
-    protected int packSize = DEFAULT_PACK_SIZE;
+    protected int pack_size = DEFAULT_PACK_SIZE;
     protected int x = 0;
     protected int y = 0;
     protected List<Spell> spell_list = new ArrayList<>(MAX_SPELL_NUMBER);
-    protected Item pack[] = new Item[DEFAULT_PACK_SIZE];
+    protected int pack[][] = new int[DEFAULT_PACK_SIZE][2];
     private int pack_usage = 0;
 
     protected int ID = DEFAULT_ID;
@@ -47,7 +45,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
     public GameUnit setAttack(int attack) {
         if(attack < MIN_ATTACK) attack = MIN_ATTACK;
         this.attack = attack;
-        onFlush();
+        onFlush(EventType.TAKE_ATTACK_CHANGE);
         return this;
     }
 
@@ -60,38 +58,52 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
     public GameUnit setDefence(int defence) {
         if(defence < MIN_DEFENCE) defence = MIN_DEFENCE;
         this.defence = defence;
-        onFlush();
+        onFlush(EventType.TAKE_DEFENCE_CHANGE);
         return this;
     }
 
     public int getPackSize() {
-        return packSize;
+        return pack_size;
     }
 
     public GameUnit setPackSize(int packSize) {
-        this.packSize = packSize;
+        this.pack_size = packSize;
         return this;
     }
 
     public int[] getPack() {
         int items[] = new int[pack.length];
         for(int i=0; i<pack.length; i++) {
-            items[i] = pack[i].getID();
+            items[i] = pack[i][0];
         }
         return items;
     }
 
     @Override
-    public EventType removeItem(int num) {
-        if(pack_usage <= 0) return EventType.PACK_EMPTY;
-        pack[num] = null;
-        pack_usage --;
-        return EventType.PACK_REMOVE_SUCCESS;
+    public EventType addItem(int id) {
+        return addItem(id, 1);
     }
 
-    public EventType addItem(Item item) {
-        if(pack_usage >= packSize) return EventType.PACK_FULL;
-        return null;
+    @Override
+    public EventType addItem(int id, int num) {
+        if(pack_usage >= pack_size) return EventType.PACK_FULL;
+        for(int i=0; i<pack.length; i++) {
+            if(pack[i][0] == 0) {
+                pack[i][0] = id;
+                pack[i][1] = num;
+                pack_usage ++;
+            }
+        }
+        return EventType.PACK_ADD_SUCCESS;
+    }
+
+    @Override
+    public EventType removeItem(int num) {
+        if(pack_usage <= 0) return EventType.PACK_EMPTY;
+        pack[num][0] = 0;
+        pack[num][1] = 0;
+        pack_usage --;
+        return EventType.PACK_REMOVE_SUCCESS;
     }
 
     @Override
@@ -114,7 +126,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
     public GameUnit setLocation(int x, int y) {
         this.x = x;
         this.y = y;
-        onFlush();
+        onFlush(EventType.TAKE_LOCATION_CHANGE);
         return this;
     }
 
@@ -152,7 +164,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
         double percent = (this.hp / maxHp);
         this.maxHp = hp;
         setHp((int)(maxHp * percent));
-        onFlush();
+        onFlush(EventType.TAKE_MAX_HP_CHANGE);
         return this;
     }
 
@@ -161,7 +173,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
         double percent = (this.mp / maxMp);
         this.maxMp = mp;
         setMp((int)(maxMp * percent));
-        onFlush();
+        onFlush(EventType.TAKE_MAX_MP_CHANGE);
         return this;
     }
 
@@ -180,7 +192,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
         if(hp < MIN_HP) hp = MIN_HP;
         if(hp > maxHp) hp = maxHp;
         this.hp = hp;
-        onFlush();
+        onFlush(EventType.TAKE_HP_CHANGE);
         return this;
     }
 
@@ -189,7 +201,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
         if(mp < MIN_MP) mp = MIN_MP;
         if(mp > maxMp) mp = maxMp;
         this.mp = mp;
-        onFlush();
+        onFlush(EventType.TAKE_MP_CHANGE);
         return this;
     }
 
@@ -217,7 +229,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
     @Override
     public Concept setName(String name) {
         this.name = name;
-        onFlush();
+        onFlush(EventType.TAKE_NAME_CHANGE);
         return this;
     }
 
@@ -231,7 +243,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
         if(level < MIN_LEVEL) level = MIN_LEVEL;
         if(level > MAX_LEVEL) level = MAX_LEVEL;
         this.level = level;
-        onFlush();
+        onFlush(EventType.TAKE_LEVEL_CHANGE);
         return this;
     }
 
@@ -245,7 +257,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
         if(move < MIN_MOVE_SPEED) move = MIN_MOVE_SPEED;
         if(move > MAX_MOVE_SPEED) move = MAX_MOVE_SPEED;
         moveSpeed = move;
-        onFlush();
+        onFlush(EventType.TAKE_MOVE_SPEED_CHANGE);
         return this;
     }
 
@@ -257,7 +269,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
     @Override
     public GameUnit setStatus(StatusType type) {
         this.default_type = type;
-        onFlush();
+        onFlush(EventType.TAKE_STATUS_CHANGE);
         return this;
     }
 
@@ -274,7 +286,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
     @Override
     public Concept setID(int id) {
         ID = id;
-        onFlush();
+        onFlush(EventType.TAKE_ID_CHANGE);
         return this;
     }
 
@@ -295,28 +307,31 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
 
     @Override
     public GameUnit hurt(int damage) {
+        if(damage <= 0) damage = 0;
         damage = (int)(damage - damage * (DEFAULT_DEFENCE_SENSOR * getDefence()));
         setHp(getHp() - damage);
+        onHurt(EventType.GET_HURT);
         return this;
     }
 
     @Override
     public GameUnit heal(int heal) {
         setHp(getHp() + heal);
+        onHeal(EventType.GET_HEAL);
         return this;
     }
 
     @Override
     public GameUnit move(int x, int y) {
         setLocation(x, y);
-        onMove();
+        onMove(EventType.TAKE_MOVE);
         return this;
     }
 
     @Override
     public GameUnit attack(GameUnit target) {
         target.hurt(getAttack());
-        onAttack();
+        onAttack(EventType.TAKE_ATTACK);
         return this;
     }
 
@@ -324,7 +339,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
     public GameUnit spell(int num, GameUnit target) {
         if(num < 0 || num >= MAX_SPELL_NUMBER) return this;
         spell_list.get(num).cast(this, target);
-        onSpell();
+        onSpell(EventType.TAKE_SPELL);
         return this;
     }
 
@@ -339,19 +354,25 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
     public void onCreate() { }
 
     @Override
-    public void onFlush() { }
+    public void onFlush(EventType type) { }
 
     @Override
     public void onPaint() { }
 
     @Override
-    public void onAttack() { }
+    public void onAttack(EventType type) { }
 
     @Override
-    public void onMove() { }
+    public void onMove(EventType type) { }
 
     @Override
-    public void onSpell() { }
+    public void onSpell(EventType type) { }
+
+    @Override
+    public void onHurt(EventType type) {}
+
+    @Override
+    public void onHeal(EventType type) {}
 
     @Override
     public String toString() {
@@ -366,9 +387,13 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
                 ", name='" + name + '\'' +
                 ", level=" + level +
                 ", moveSpeed=" + moveSpeed +
+                ", owner=" + owner +
+                ", packSize=" + pack_size +
                 ", x=" + x +
                 ", y=" + y +
-                ", spell_list=" + (spell_list == null ? null : Arrays.asList(spell_list)) +
+                ", spell_list=" + spell_list +
+                ", pack=" + (pack == null ? null : Arrays.asList(pack)) +
+                ", pack_usage=" + pack_usage +
                 ", ID=" + ID +
                 ", isUsed=" + isUsed +
                 ']';

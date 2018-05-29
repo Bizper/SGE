@@ -6,7 +6,7 @@ import intf.task.Task;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TaskManager implements DefaultConstant {
+public class TaskManager {
 
     private List<Timer> list = new LinkedList<>();
 
@@ -19,6 +19,7 @@ public class TaskManager implements DefaultConstant {
         return tm;
     }
 
+    //default runtime = 1000/60
     public <T> int addTask(Task<T> task) {
         Timer<T> timer = new Timer<>();
         timer.setTask(task);
@@ -27,9 +28,19 @@ public class TaskManager implements DefaultConstant {
         return list.indexOf(timer);
     }
 
-    public <T> int addTask(Task<T> task, T t) {
+    public <T> int addTask(Task<T> task, int runtime) {
         Timer<T> timer = new Timer<>();
         timer.setTask(task);
+        timer.setRuntime(runtime);
+        timer.start();
+        list.add(timer);
+        return list.indexOf(timer);
+    }
+
+    public <T> int addTask(Task<T> task, T t, int runtime) {
+        Timer<T> timer = new Timer<>();
+        timer.setTask(task);
+        timer.setRuntime(runtime);
         timer.setObject(t);
         timer.start();
         list.add(timer);
@@ -51,6 +62,12 @@ public class TaskManager implements DefaultConstant {
         private T t;
         private Task<T> task;
         private boolean flag = true;
+        private int runtime = DefaultConstant.FRAME_PER_SECOND;
+
+        public Timer setRuntime(int runtime) {
+            this.runtime = runtime;
+            return this;
+        }
 
         public void close() {
             flag = false;
@@ -78,7 +95,7 @@ public class TaskManager implements DefaultConstant {
             while(flag) {
                 try {
                     task.action(t);
-                    Thread.sleep(1000/FRAME_PER_SECOND);
+                    Thread.sleep(runtime);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -1,5 +1,6 @@
 package impl;
 
+import constant.EventType;
 import intf.Concept;
 
 public class Item implements Concept {
@@ -50,7 +51,7 @@ public class Item implements Concept {
     }
 
     @Override
-    public void onFlush() {
+    public void onFlush(EventType type) {
 
     }
 

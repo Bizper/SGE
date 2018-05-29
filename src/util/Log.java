@@ -16,7 +16,7 @@ public class Log {
     1 output to file
     2 output to remote file(in plan)
      */
-    private int mode = 0;
+    private static int mode = 0;
 
     private Log(Class<?> cls) {
         this.classes = cls;
@@ -35,7 +35,7 @@ public class Log {
     }
 
     public Log setOutputMode(int mode) {
-        this.mode = mode;
+        Log.mode = mode;
         return this;
     }
 
@@ -65,7 +65,7 @@ public class Log {
     }
 
     private void print(String level, int mode, Object obj) {
-        String output = level + ": [" + classes.getName() + "] " + obj;
+        String output = "[" + level + "][" + DateUtil.getHour() + "][" + classes.getName() + "] " + obj;
         switch(mode) {
             case 0:
                 System.out.println(output);

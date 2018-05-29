@@ -1,5 +1,7 @@
 package intf;
 
+import constant.EventType;
+
 public interface Concept {
 
     Concept setName(String name);
@@ -40,7 +42,7 @@ public interface Concept {
     /**
      * 此方法将在状态被改变时被调用
      */
-    void onFlush();
+    void onFlush(EventType type);
 
     /**
      * 此方法将在被绘制时被调用

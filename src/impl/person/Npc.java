@@ -19,9 +19,12 @@ public class Npc extends Instance {
                 ", name='" + name + '\'' +
                 ", level=" + level +
                 ", moveSpeed=" + moveSpeed +
+                ", owner=" + owner +
+                ", pack_size=" + pack_size +
                 ", x=" + x +
                 ", y=" + y +
-                ", spell_list=" + (spell_list == null ? null : Arrays.asList(spell_list)) +
+                ", spell_list=" + spell_list +
+                ", pack=" + (pack == null ? null : Arrays.asList(pack)) +
                 ", ID=" + ID +
                 ", isUsed=" + isUsed +
                 ']';

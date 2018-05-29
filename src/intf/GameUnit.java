@@ -33,9 +33,11 @@ public interface GameUnit {
 
     int getPackSize();
 
+    EventType addItem(int id, int num);
+
     GameUnit setPackSize(int packSize);
 
-    EventType addItem(Item item);
+    EventType addItem(int id);
 
     EventType removeItem(int num);
 
@@ -85,10 +87,14 @@ public interface GameUnit {
 
     GameUnit spell(int index, GameUnit target);
 
-    void onAttack();
+    void onAttack(EventType type);
 
-    void onMove();
+    void onMove(EventType type);
 
-    void onSpell();
+    void onSpell(EventType type);
+
+    void onHurt(EventType type);
+
+    void onHeal(EventType type);
 
 }

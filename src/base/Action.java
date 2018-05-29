@@ -1,6 +1,7 @@
 package base;
 
 import constant.DefaultConstant;
+import constant.EventType;
 import intf.Concept;
 import intf.GameAction;
 import intf.GameUnit;
@@ -25,7 +26,7 @@ public abstract class Action implements Concept, GameAction, DefaultConstant {
 
     public Concept setName(String name) {
         this.name = name;
-        onFlush();
+        onFlush(EventType.TAKE_NAME_CHANGE);
         return this;
     }
 
@@ -41,7 +42,7 @@ public abstract class Action implements Concept, GameAction, DefaultConstant {
     @Override
     public Concept setID(int id) {
         ID = id;
-        onFlush();
+        onFlush(EventType.TAKE_ID_CHANGE);
         return this;
     }
 
@@ -72,7 +73,7 @@ public abstract class Action implements Concept, GameAction, DefaultConstant {
     public void onCreate() { }
 
     @Override
-    public void onFlush() { }
+    public void onFlush(EventType type) { }
 
     @Override
     public void onPaint() { }
@@ -99,20 +100,20 @@ public abstract class Action implements Concept, GameAction, DefaultConstant {
     public void cast(GameUnit trigger, GameUnit target) {
         if(target_action == null) return;
         target_action.action(trigger, target);
-        onFlush();
+        onFlush(EventType.TAKE_SPELL);
     }
 
     @Override
     public void cast(GameUnit trigger, int x, int y, int radius) {
         if(range_action == null) return;
         range_action.action(trigger, x, y, radius);
-        onFlush();
+        onFlush(EventType.TAKE_SPELL);
     }
 
     public void cast(GameUnit trigger) {
         if(self_action == null) return;
         self_action.action(trigger);
-        onFlush();
+        onFlush(EventType.TAKE_SPELL);
     }
 
     @Override

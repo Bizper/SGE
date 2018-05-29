@@ -24,7 +24,7 @@ public class ConfigUtil implements DefaultConstant {
         try {
             prop = new Properties();
             log.log("loading properties...");
-            inputStream = ConfigUtil.class.getResourceAsStream("/config.properties");
+            inputStream = ConfigUtil.class.getResourceAsStream("/src/config.properties");
             prop.load(inputStream);
         } catch (IOException e) {
             log.error(e);

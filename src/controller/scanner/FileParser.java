@@ -23,7 +23,7 @@ public class FileParser {
         try {
             return new BufferedReader(new FileReader(f));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log.log("file not found. check your file location.");
         }
         return null;
     }
@@ -36,16 +36,17 @@ public class FileParser {
             return null;
         }
         setProgress(MIN_PROGRESS);
+        sce = new SCE();
         String str;
         String name;
         br = init(f);
         if(br == null) return null;
         try {
             while((str = br.readLine()) != null) {
-                System.out.println(str);
+
             }
         } catch(IOException ioe) {
-            ioe.printStackTrace();
+            log.error(ioe);
         }
         setProgress(MAX_PROGRESS);
         return sce;
@@ -68,7 +69,7 @@ public class FileParser {
                 System.out.println(str);
             }
         } catch(IOException ioe) {
-            ioe.printStackTrace();
+            log.error(ioe);
         }
         setProgress(MAX_PROGRESS);
         return plr;
@@ -93,7 +94,7 @@ public class FileParser {
             }
             mp = new MP(name, list);
         } catch(IOException ioe) {
-            ioe.printStackTrace();
+            log.error(ioe);
         }
         setProgress(MAX_PROGRESS);
         return mp;

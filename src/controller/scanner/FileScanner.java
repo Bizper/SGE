@@ -1,20 +1,25 @@
 package controller.scanner;
 
-import controller.scanner.error.TypeErrorException;
 import mapping.MP;
 import mapping.PLR;
 import mapping.SCE;
+import util.Log;
 
 /**
  * 根据SCE文件中的路径查找对应的PLR和MP文件
  */
 public class FileScanner {
 
+    private static Log log = Log.getInstance(FileScanner.class);
+
     private static String filePath = "";
+
+    private static String main = "main.sce";
 
     public static SCE searchForSCE(String path) {
         filePath = path;
-        return FileParser.parseSCE(path + "main.sce");
+        log.log("searching file for " + path + main + "...");
+        return FileParser.parseSCE(path + main);
     }
 
     public static PLR searchForPLR(String path) {

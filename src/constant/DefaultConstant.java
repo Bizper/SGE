@@ -61,6 +61,6 @@ public interface DefaultConstant {
      * THREAD PROPERTIES
      */
 
-    int FRAME_PER_SECOND = 60;
+    int FRAME_PER_SECOND = 1000/60;
 
 }
