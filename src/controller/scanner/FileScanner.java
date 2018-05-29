@@ -12,14 +12,16 @@ public class FileScanner {
 
     private static Log log = Log.getInstance(FileScanner.class);
 
-    private static String filePath = "";
-
     private static String main = "main.sce";
 
     public static SCE searchForSCE(String path) {
-        filePath = path;
         log.log("searching file for " + path + main + "...");
         return FileParser.parseSCE(path + main);
+    }
+
+    public static SCE searchForSCE(String path, String filename) {
+        log.log("searching file for " + path + filename + "...");
+        return FileParser.parseSCE(path + filename);
     }
 
     public static PLR searchForPLR(String path) {

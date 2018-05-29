@@ -44,7 +44,7 @@ public class Dependence {
             log.error("empty SCE file.");
             return;
         }
-
+        log.log("initial game world with \"" + sce.getName() + "\" settings...");
     }
 
     /**
@@ -58,6 +58,11 @@ public class Dependence {
         switch(code) {
             case 0x4a:
                 TaskManager.getInstance().close(dependence.task);
+                break;
+            case 0x4b:
+                break;
+            case 0x4c:
+                display.clear();
                 break;
             case 0x9a:
                 Exiter.exit(Dependence.class.getName());

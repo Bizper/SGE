@@ -2,11 +2,14 @@ package controller;
 
 import constant.DefaultConstant;
 import intf.task.Task;
+import util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class TaskManager {
+
+    private static Log log = Log.getInstance(TaskManager.class);
 
     private List<Timer> list = new LinkedList<>();
 
@@ -52,6 +55,7 @@ public class TaskManager {
     }
 
     public void closeAll() {
+        log.log("closing all tasks...");
         for(Timer timer : list) {
             timer.close();
         }

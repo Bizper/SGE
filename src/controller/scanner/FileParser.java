@@ -23,7 +23,7 @@ public class FileParser {
         try {
             return new BufferedReader(new FileReader(f));
         } catch (FileNotFoundException e) {
-            log.log("file not found. check your file location.");
+            log.error("file not found. check your file location.");
         }
         return null;
     }
@@ -36,14 +36,13 @@ public class FileParser {
             return null;
         }
         setProgress(MIN_PROGRESS);
-        sce = new SCE();
         String str;
         String name;
         br = init(f);
         if(br == null) return null;
         try {
+            sce = new SCE();
             while((str = br.readLine()) != null) {
-
             }
         } catch(IOException ioe) {
             log.error(ioe);

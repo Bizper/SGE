@@ -10,7 +10,6 @@ public class Exiter {
     public static void release() {
         log.log("releasing resource...");
         ConfigUtil.saveConstant();
-        log.log("closing all tasks...");
         TaskManager.getInstance().closeAll();
         exit(Exiter.class.getName());
     }

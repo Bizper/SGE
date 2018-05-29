@@ -16,4 +16,9 @@ public class MapLoader {
         return FileScanner.searchForSCE(path);
     }
 
+    public static SCE load(String path, String filename) {
+        log.log("load SCE file from " + path);
+        return FileScanner.searchForSCE(path, filename);
+    }
+
 }

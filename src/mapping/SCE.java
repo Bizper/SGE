@@ -5,8 +5,18 @@ package mapping;
  */
 public class SCE {
 
+    private String name;
+
     public boolean isEmpty() {
         return false;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public SCE setName(String name) {
+        this.name = name;
+        return this;
+    }
 }

@@ -14,6 +14,7 @@ public class Display {
 
     private Label location = new Label("LOCATION:");
     private Label status = new Label("STATUS:");
+    private Label player = new Label("PLAYER:");
     private TextArea message = new TextArea("", 600, 500, TextArea.SCROLLBARS_NONE);
 
     private Display(Panel panel) {
@@ -26,10 +27,12 @@ public class Display {
 
         location.setBounds(10, 10, 100, 10);
         status.setBounds(10, 30, 100, 10);
+        player.setBounds(620, 10, 100, 10);
         message.setBounds(10, 50, 600, 400);
         message.setEditable(false);
         panel.setLayout(null);
         panel.add(location);
+        panel.add(player);
         panel.add(status);
         panel.add(message);
 
@@ -44,6 +47,11 @@ public class Display {
     public static Display getInstance() {
         if(display == null) return null;
         return display;
+    }
+
+    public Display clear() {
+        message.setText("");
+        return this;
     }
 
     public Display setLocation(String title) {
