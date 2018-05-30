@@ -58,6 +58,8 @@ public class Win extends Frame implements DefaultConstant {
             switch(e.getKeyCode()) {
                 case KeyEvent.VK_ESCAPE:
                     Dependence.interrupt(0x4a);
+                case KeyEvent.VK_F1:
+                    Dependence.interrupt(0x4e);
             }
         }
     }

@@ -23,16 +23,16 @@ public class TaskManager {
     }
 
     //default runtime = 1000/60
-    public <T> int addTask(Task<T> task) {
-        Timer<T> timer = new Timer<>();
+    public <T> int addTask(Task<T> task, String name) {
+        Timer<T> timer = new Timer<>(name);
         timer.setTask(task);
         timer.start();
         list.add(timer);
         return list.indexOf(timer);
     }
 
-    public <T> int addTask(Task<T> task, int runtime) {
-        Timer<T> timer = new Timer<>();
+    public <T> int addTask(Task<T> task, int runtime, String name) {
+        Timer<T> timer = new Timer<>(name);
         timer.setTask(task);
         timer.setRuntime(runtime);
         timer.start();
@@ -40,8 +40,8 @@ public class TaskManager {
         return list.indexOf(timer);
     }
 
-    public <T> int addTask(Task<T> task, T t, int runtime) {
-        Timer<T> timer = new Timer<>();
+    public <T> int addTask(Task<T> task, T t, int runtime, String name) {
+        Timer<T> timer = new Timer<>(name);
         timer.setTask(task);
         timer.setRuntime(runtime);
         timer.setObject(t);
@@ -51,6 +51,7 @@ public class TaskManager {
     }
 
     public void close(int id) {
+        log.log("closing " + id + " task...");
         list.get(id).close();
     }
 
@@ -61,12 +62,27 @@ public class TaskManager {
         }
     }
 
+    public void printAll() {
+        StringBuilder stringBuilder = new StringBuilder("TaskList: ");
+        stringBuilder.append("\n").append("ID").append(" ").append("NAME").append("\n");
+        for(Timer timer : list) {
+            stringBuilder.append(list.indexOf(timer)).append(" ").append(timer).append("\n");
+        }
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        log.log(stringBuilder.toString());
+    }
+
     private class Timer<T> extends Thread {
 
+        private String name;
         private T t;
         private Task<T> task;
         private boolean flag = true;
         private int runtime = DefaultConstant.FRAME_PER_SECOND;
+
+        public Timer(String name) {
+            this.name = name;
+        }
 
         public Timer setRuntime(int runtime) {
             this.runtime = runtime;
@@ -104,6 +120,10 @@ public class TaskManager {
                     e.printStackTrace();
                 }
             }
+        }
+
+        public String toString() {
+            return name;
         }
 
     }

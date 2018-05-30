@@ -1,0 +1,8 @@
+"spell_fire_ball" {
+    "SpellName" "Fire Ball"
+    "SpellType" "HURT | TARGET | ENEMY"
+    "SpellNumber" "50"
+    "SpellNumberType" "MAGIC"
+    "SpellCooldown" "3"
+    "SpellManaCost" "20"
+}

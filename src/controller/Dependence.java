@@ -2,6 +2,7 @@ package controller;
 
 import controller.scanner.MapLoader;
 import mapping.SCE;
+import screen.BufferedScreen;
 import screen.Display;
 import util.Log;
 
@@ -17,6 +18,10 @@ public class Dependence {
 
     private int task = 0;
 
+    private int step = 1;
+
+    private SCE sce;
+
     private Dependence() {
         init();
     }
@@ -30,16 +35,17 @@ public class Dependence {
         log.log("initiate " + Dependence.class.getName() + " for logic progress.");
         load();
         display = Display.getInstance();
-        task = TaskManager.getInstance().addTask((e) -> deal(), 1000);
+        task = TaskManager.getInstance().addTask((e) -> deal(), 5000, "DEFAULT");
         log.log(Dependence.class.getName() + " initiation complete.");
     }
 
     private void deal() {
-        display.append("get message from message queue.");
+        display.append(sce.getWords(step));
+        step ++;
     }
 
     private void load() {
-        SCE sce = MapLoader.load("./");
+        sce = MapLoader.load("./");
         if(sce == null) {
             log.error("empty SCE file.");
             return;
@@ -52,6 +58,7 @@ public class Dependence {
      * 0x4b 结束所有任务
      * 0x4c 清空消息栏
      * 0x4d 清空当前缓冲区
+     * 0x4e 输出当前运行的所有任务
      * 0x9a 强制退出程序
      */
     public static void interrupt(int code) {
@@ -60,9 +67,16 @@ public class Dependence {
                 TaskManager.getInstance().close(dependence.task);
                 break;
             case 0x4b:
+                TaskManager.getInstance().closeAll();
                 break;
             case 0x4c:
                 display.clear();
+                break;
+            case 0x4d:
+                BufferedScreen.clear();
+                break;
+            case 0x4e:
+                TaskManager.getInstance().printAll();
                 break;
             case 0x9a:
                 Exiter.exit(Dependence.class.getName());

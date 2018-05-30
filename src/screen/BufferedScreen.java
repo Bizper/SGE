@@ -21,4 +21,8 @@ public class BufferedScreen {
         return new String(text);
     }
 
+    public static void clear() {
+        text = null;
+    }
+
 }
