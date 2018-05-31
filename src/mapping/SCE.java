@@ -8,6 +8,8 @@ import java.util.Map;
  */
 public class SCE {
 
+    private PLR plr;
+
     private String name;
 
     private double version;
@@ -66,6 +68,15 @@ public class SCE {
 
     public SCE setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public PLR getPlr() {
+        return plr;
+    }
+
+    public SCE setPlr(PLR plr) {
+        this.plr = plr;
         return this;
     }
 }

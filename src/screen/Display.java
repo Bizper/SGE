@@ -60,7 +60,14 @@ public class Display {
     }
 
     public Display append(String str) {
-        message.append(BufferedScreen.add(str + "\n"));
+        message.append(str + "\n");
+        return this;
+    }
+
+    public Display append() {
+        if(BufferedScreen.isChange()) {
+            message.append(BufferedScreen.get() + "\n");
+        }
         return this;
     }
 

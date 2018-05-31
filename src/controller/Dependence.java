@@ -4,9 +4,11 @@ import controller.scanner.MapLoader;
 import mapping.SCE;
 import screen.BufferedScreen;
 import screen.Display;
+import service.Proc;
 import util.Log;
 
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 
 public class Dependence {
 
@@ -17,8 +19,6 @@ public class Dependence {
     private static Display display;
 
     private int task = 0;
-
-    private int step = 1;
 
     private SCE sce;
 
@@ -35,13 +35,12 @@ public class Dependence {
         log.log("initiate " + Dependence.class.getName() + " for logic progress.");
         load();
         display = Display.getInstance();
-        task = TaskManager.getInstance().addTask((e) -> deal(), 5000, "DEFAULT");
+        task = TaskManager.getInstance().addTask((e) -> deal(), 1000/60, "DEFAULT");
         log.log(Dependence.class.getName() + " initiation complete.");
     }
 
     private void deal() {
-        display.append(sce.getWords(step));
-        step ++;
+        display.append();
     }
 
     private void load() {
@@ -53,33 +52,45 @@ public class Dependence {
         log.log("initial game world with \"" + sce.getName() + "\" settings...");
     }
 
+    public static void interrupt(int code) {
+        interrupt(code, "");
+    }
+
     /**
-     * 0x4a 结束当前任务
-     * 0x4b 结束所有任务
-     * 0x4c 清空消息栏
-     * 0x4d 清空当前缓冲区
-     * 0x4e 输出当前运行的所有任务
+     * 0x1a 结束当前任务
+     * 0x1b 结束所有任务
+     * 0x1c 输出当前运行的所有任务
+     * 0x1d 输出所有注册单元
+     * 0x2a 将字符串写入缓冲区
+     * 0x3a 清空消息栏
+     * 0x3b 清空当前缓冲区
      * 0x9a 强制退出程序
      */
-    public static void interrupt(int code) {
+    public static void interrupt(int code, String buffer) {
         switch(code) {
-            case 0x4a:
+            case 0x1a:
                 TaskManager.getInstance().close(dependence.task);
                 break;
-            case 0x4b:
+            case 0x1b:
                 TaskManager.getInstance().closeAll();
                 break;
-            case 0x4c:
-                display.clear();
-                break;
-            case 0x4d:
-                BufferedScreen.clear();
-                break;
-            case 0x4e:
+            case 0x1c:
                 TaskManager.getInstance().printAll();
                 break;
+            case 0x1d:
+                Proc.printAll();
+                break;
+            case 0x2a:
+                BufferedScreen.write(buffer);
+                break;
+            case 0x3a:
+                display.clear();
+                break;
+            case 0x3b:
+                BufferedScreen.clear();
+                break;
             case 0x9a:
-                Exiter.exit(Dependence.class.getName());
+                Exiter.exit(Dependence.class);
                 break;
         }
     }

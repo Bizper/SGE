@@ -1,12 +1,16 @@
 package controller.scanner;
 
-import base.Instance;
 import constant.DefaultConstant;
+import impl.action.Spell;
 import mapping.*;
 import mapping.inside.Block;
+import service.ConceptFactory;
+import service.Proc;
 import util.Log;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FileParser {
 
@@ -35,7 +39,7 @@ public class FileParser {
             log.error("not current SCE file. check your file location.");
             return null;
         }
-        setProgress(MIN_PROGRESS);
+        setProgress(path, MIN_PROGRESS);
         String cache;
         br = init(file);
         if(br == null) return sce;
@@ -46,21 +50,33 @@ public class FileParser {
         } catch (IOException e) {
             log.error(e);
         }
-        setProgress(MAX_PROGRESS);
+        setProgress(path, MAX_PROGRESS);
         return sce;
     }
 
     public static PLR parsePLR(String path) {
         PLR plr = new PLR();
-        File f = new File(path);
+        File file = new File(path);
         if(!path.endsWith(".plr")) {
             log.error("not current PLR file. check your file location.");
             return null;
         }
-        setProgress(MIN_PROGRESS);
-        String str;
-        String name;
-        setProgress(MAX_PROGRESS);
+        setProgress(path, MIN_PROGRESS);
+        String cache = "";
+        StringBuilder stringBuilder = new StringBuilder();
+        br = init(file);
+        if(br == null) return plr;
+        try {
+            while((cache = br.readLine()) != null) {
+                stringBuilder.append(cache);
+            }
+        } catch (IOException e) {
+            log.error(e);
+        }
+        cache = stringBuilder.toString();
+        setProgress(path, 50.0);
+        plr = parsePLR(cache, plr);
+        setProgress(path, MAX_PROGRESS);
         return plr;
     }
 
@@ -70,11 +86,11 @@ public class FileParser {
             log.error("not current MP file. check your file location.");
             return null;
         }
-        setProgress(MIN_PROGRESS);
+        setProgress(path, MIN_PROGRESS);
         String name = "";
         Block list[][] = new Block[DefaultConstant.MAX_MAP_SIZE][DefaultConstant.MAX_MAP_SIZE];
         mp = new MP(name, list);
-        setProgress(MAX_PROGRESS);
+        setProgress(path, MAX_PROGRESS);
         return mp;
     }
 
@@ -86,8 +102,9 @@ public class FileParser {
         return progress;
     }
 
-    private static void setProgress(double p) {
+    private static void setProgress(String message, double p) {
         if(p > MAX_PROGRESS) p = MAX_PROGRESS;
+        log.log("parsing \"" + message + "\" progress: " + p + "%");
         progress = p;
     }
 
@@ -134,10 +151,59 @@ public class FileParser {
                 }
                 stringBuilder.append(list[i]);
             }
+            if(key == null) {
+                return sce;
+            }
             value = stringBuilder.toString();
             sce.addWords(Integer.parseInt(key), value);
         }
         return sce;
+    }
+
+    private static boolean flag = false;
+
+    private static PLR parsePLR(String str, PLR plr) {
+        if(str == null || str.isEmpty()) return plr;
+        char list[] = str.toCharArray();
+        for(int i=0; i<list.length; i++) {
+            if(list[i] == '{') {
+                String id = str.substring(0, str.indexOf('{') - 1);
+                Map<String, String> result = parseInside(str, i);
+                if(id.startsWith("spell")) {
+                    Spell spell = ConceptFactory.getInstance(Spell.class);
+                    if(result.get("SpellType").contains("TARGET")) {
+                        spell.setName(result.get("SpellName"));
+                        spell.setAction((e, u) -> {
+                           e.setMp(e.getMp() - Integer.parseInt(result.get("SpellManaCost")));
+                           u.setHp(u.getHp() - Integer.parseInt(result.get("SpellNumber")));
+                        });
+                    }
+                    Proc.add(id, spell.getID());
+                }
+
+            }
+        }
+        return plr;
+    }
+
+    private static Map<String, String> parseInside(String str, int pointer) {
+        Map<String, String> result = new HashMap<>();
+        StringBuilder stringBuilder = new StringBuilder();
+        int offset = str.charAt(pointer + 1) == '\n' ? 2 : 1;
+        for(int i=pointer + offset; i<str.length(); i++) {
+            if(str.charAt(i) == '}') {
+                String st = stringBuilder.toString();
+                String r[] = st.split("\n");
+                for(int j=0; j<r.length; j++) {
+                    String s = r[j];
+                    String res[] = s.split("=");
+                    result.put(res[0], res[1]);
+                }
+                break;
+            }
+            stringBuilder.append(str.charAt(i));
+        }
+        return result;
     }
 
 }

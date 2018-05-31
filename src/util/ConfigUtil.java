@@ -10,7 +10,7 @@ import java.util.Properties;
 
 public class ConfigUtil implements DefaultConstant {
 
-    private static Properties prop;
+    private static Properties prop = new Properties();
 
     private static InputStream inputStream;
 
@@ -20,11 +20,10 @@ public class ConfigUtil implements DefaultConstant {
 
     private static Log log = Log.getInstance(ConfigUtil.class);
 
-    public static void init() {
+    static {
         try {
-            prop = new Properties();
             log.log("loading properties...");
-            inputStream = ConfigUtil.class.getResourceAsStream("/src/config.properties");
+            inputStream = ConfigUtil.class.getResourceAsStream("/config.properties");
             prop.load(inputStream);
         } catch (IOException e) {
             log.error(e);
@@ -36,7 +35,6 @@ public class ConfigUtil implements DefaultConstant {
      */
     public static void saveConstant() {
         log.log("save configs...");
-        prop = new Properties();
         Field fields[] = DefaultConstant.class.getFields();
         try {
             fw = new FileWriter(new File(outputFilePath));
@@ -51,19 +49,16 @@ public class ConfigUtil implements DefaultConstant {
     }
 
     public static String getValue(String key) {
-        if(prop == null) init();
         return prop.getProperty(key);
     }
 
     public static int getValueAsInt(String key) {
-        if(prop == null) init();
         String value = prop.getProperty(key);
         if(value == null || value.isEmpty()) return 0;
         else return Integer.parseInt(value);
     }
 
     public static double getValueAsDouble(String key) {
-        if(prop == null) init();
         String value = prop.getProperty(key);
         if(value == null || value.isEmpty()) return 0.0;
         else return Double.parseDouble(value);

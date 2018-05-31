@@ -11,12 +11,13 @@ public class Exiter {
         log.log("releasing resource...");
         ConfigUtil.saveConstant();
         TaskManager.getInstance().closeAll();
-        exit(Exiter.class.getName());
+        exit(Exiter.class);
     }
 
-    public static void exit(String str) {
-        log.log("exit from " + str);
-        System.exit(0);
+    public static void exit(Class<?> cls) {
+        log.log("exit from " + cls.getName());
+        if(cls == Exiter.class) System.exit(0);
+        else System.exit(1);
     }
 
 }

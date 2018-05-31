@@ -19,6 +19,8 @@ public class Proc implements DefaultConstant {
 
     private static Map<Integer, Concept> list = new HashMap<>();
 
+    private static Map<String, Integer> mapping = new HashMap<>();
+
     public synchronized static Concept get(int id) {
         return list.get(id);
     }
@@ -52,14 +54,17 @@ public class Proc implements DefaultConstant {
         System.gc();
     }
 
+    public synchronized static void add(String id, int ID) {
+        mapping.put(id, ID);
+    }
+
+    public synchronized static int get(String id) {
+        return mapping.get(id);
+    }
+
     public static void printAll() {
-        StringBuilder str = new StringBuilder();
         for(Map.Entry<Integer, Concept> e : list.entrySet()) {
-            str.append("Proc [");
-            str.append(e.getValue());
-            str.append("]");
-            log.log(str.toString());
-            str.delete(0, str.length());
+            log.log(e.getValue());
         }
 
     }
