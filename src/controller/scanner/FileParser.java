@@ -2,6 +2,7 @@ package controller.scanner;
 
 import constant.DefaultConstant;
 import impl.action.Spell;
+import intf.GameAction;
 import mapping.*;
 import mapping.inside.Block;
 import service.ConceptFactory;
@@ -160,8 +161,6 @@ public class FileParser {
         return sce;
     }
 
-    private static boolean flag = false;
-
     private static PLR parsePLR(String str, PLR plr) {
         if(str == null || str.isEmpty()) return plr;
         char list[] = str.toCharArray();
@@ -169,18 +168,26 @@ public class FileParser {
             if(list[i] == '{') {
                 String id = str.substring(0, str.indexOf('{') - 1);
                 Map<String, String> result = parseInside(str, i);
+                str = result.get("release");
+                list = str.toCharArray();
                 if(id.startsWith("spell")) {
                     Spell spell = ConceptFactory.getInstance(Spell.class);
-                    if(result.get("SpellType").contains("TARGET")) {
+                    if(result.get("SpellType").contains("TARGET") && result.get("SpellType").contains("HURT")) {
                         spell.setName(result.get("SpellName"));
                         spell.setAction((e, u) -> {
                            e.setMp(e.getMp() - Integer.parseInt(result.get("SpellManaCost")));
                            u.setHp(u.getHp() - Integer.parseInt(result.get("SpellNumber")));
                         });
                     }
+                    if(result.get("SpellType").contains("SELF") && result.get("SpellType").contains("HEAL")) {
+                        spell.setName(result.get("SpellName"));
+                        spell.setAction((e) -> {
+                            e.setMp(e.getMp() - Integer.parseInt(result.get("SpellManaCost")));
+                            e.setHp(e.getHp() + Integer.parseInt(result.get("SpellNumber")));
+                        });
+                    }
                     Proc.add(id, spell.getID());
                 }
-
             }
         }
         return plr;
@@ -199,6 +206,7 @@ public class FileParser {
                     String res[] = s.split("=");
                     result.put(res[0], res[1]);
                 }
+                result.put("release", str.substring(i + 2, str.length()));
                 break;
             }
             stringBuilder.append(str.charAt(i));

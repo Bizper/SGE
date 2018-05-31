@@ -53,7 +53,7 @@ public class Dependence {
     }
 
     public static void interrupt(int code) {
-        interrupt(code, "");
+        interrupt(code, null);
     }
 
     /**
@@ -67,6 +67,7 @@ public class Dependence {
      * 0x9a 强制退出程序
      */
     public static void interrupt(int code, String buffer) {
+        log.log("interrupt code: " + code + " with buffer: " + (buffer == null ? "null" : buffer));
         switch(code) {
             case 0x1a:
                 TaskManager.getInstance().close(dependence.task);

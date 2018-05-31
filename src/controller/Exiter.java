@@ -15,9 +15,13 @@ public class Exiter {
     }
 
     public static void exit(Class<?> cls) {
-        log.log("exit from " + cls.getName());
-        if(cls == Exiter.class) System.exit(0);
-        else System.exit(1);
+        if(cls == Exiter.class) {
+            log.log("exit from " + cls.getName());
+            System.exit(0);
+        } else {
+            log.warning("exit from " + cls.getName());
+            System.exit(1);
+        }
     }
 
 }

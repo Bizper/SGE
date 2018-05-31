@@ -2,6 +2,6 @@ package intf.action;
 
 public interface SelfOperation<E> {
 
-    E action(E e);
+    void action(E e);
 
 }
