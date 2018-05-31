@@ -63,6 +63,10 @@ public class Proc implements DefaultConstant {
     }
 
     public static void printAll() {
+        if(list.isEmpty()) {
+            log.log("no concept registered.");
+            return;
+        }
         for(Map.Entry<Integer, Concept> e : list.entrySet()) {
             log.log(e.getValue());
         }

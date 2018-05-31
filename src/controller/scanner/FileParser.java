@@ -68,7 +68,7 @@ public class FileParser {
         if(br == null) return plr;
         try {
             while((cache = br.readLine()) != null) {
-                stringBuilder.append(cache);
+                stringBuilder.append(cache).append("\n");
             }
         } catch (IOException e) {
             log.error(e);

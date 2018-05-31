@@ -3,7 +3,6 @@ package controller.scanner;
 import mapping.MP;
 import mapping.PLR;
 import mapping.SCE;
-import org.jetbrains.annotations.NotNull;
 import util.Log;
 
 /**
