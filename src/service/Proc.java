@@ -67,10 +67,14 @@ public class Proc implements DefaultConstant {
             log.log("no concept registered.");
             return;
         }
+        log.log("REGISTERED CONCEPT LIST");
         for(Map.Entry<Integer, Concept> e : list.entrySet()) {
             log.log(e.getValue());
         }
-
+        log.log("ID MAPPING LIST");
+        for(Map.Entry<String, Integer> e : mapping.entrySet()) {
+            log.log("\"" + e.getKey() + "\" " + e.getValue());
+        }
     }
 
 }

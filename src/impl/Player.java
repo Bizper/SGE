@@ -5,10 +5,12 @@ import service.ConceptFactory;
 
 public class Player extends Instance {
 
-    private Player() {}
-
     public static Player getInstance() {
         return ConceptFactory.getInstance(Player.class);
+    }
+
+    public void onCreate() {
+        setName("John Wick");
     }
 
 }

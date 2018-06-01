@@ -83,6 +83,7 @@ public class FileParser {
 
     public static MP parseMP(String path) {
         MP mp = null;
+        File file = new File(path);
         if(!path.endsWith(".mp")) {
             log.error("not current MP file. check your file location.");
             return null;
@@ -91,6 +92,16 @@ public class FileParser {
         String name = "";
         Block list[][] = new Block[DefaultConstant.MAX_MAP_SIZE][DefaultConstant.MAX_MAP_SIZE];
         mp = new MP(name, list);
+        String cache = "";
+        br = init(file);
+        if(br == null) return mp;
+        try {
+            while((cache = br.readLine()) != null) {
+                mp = parseMP(cache, mp);
+            }
+        } catch (IOException e) {
+            log.error(e);
+        }
         setProgress(path, MAX_PROGRESS);
         return mp;
     }
@@ -138,6 +149,10 @@ public class FileParser {
                     break;
                 case "main":
                     sce.setMain(Boolean.getBoolean(value));
+                    break;
+                case "mp":
+                    MP mp = FileScanner.searchForMP("./", value);
+                    sce.addMap(value, mp);
                     break;
             }
             return sce;
@@ -213,5 +228,36 @@ public class FileParser {
         }
         return result;
     }
+
+    private static MP parseMP(String str, MP mp) {
+        if(str == null || str.isEmpty()) return mp;
+        StringBuilder stringBuilder = new StringBuilder();
+        boolean isKey = true;
+        String key = null, value;
+        char list[] = str.toCharArray();
+        if(list[0] == '.') {
+            for(int i=1; i<list.length; i++) {
+                if(list[i] == ' ' && isKey) {
+                    isKey = false;
+                    key = stringBuilder.toString();
+                    stringBuilder.delete(0, stringBuilder.length());
+                    continue;
+                }
+                stringBuilder.append(list[i]);
+            }
+            value = stringBuilder.toString();
+            if(key == null) {
+                return mp;
+            }
+            switch(key) {
+                case "name":
+                    mp.setName(value);
+                    break;
+            }
+        }
+        return mp;
+    }
+
+
 
 }

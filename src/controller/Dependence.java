@@ -1,6 +1,8 @@
 package controller;
 
+import controller.model.RunModel;
 import controller.scanner.MapLoader;
+import impl.Player;
 import mapping.SCE;
 import screen.BufferedScreen;
 import screen.Display;
@@ -20,7 +22,7 @@ public class Dependence {
 
     private int task = 0;
 
-    private SCE sce;
+    private RunModel runModel;
 
     private Dependence() {
         init();
@@ -40,15 +42,18 @@ public class Dependence {
     }
 
     private void deal() {
-        display.append();
+        display.append(runModel);
     }
 
     private void load() {
-        sce = MapLoader.load("./");
+        runModel = new RunModel();
+        SCE sce = MapLoader.load("./");
         if(sce == null) {
             log.error("empty SCE file.");
             return;
         }
+        runModel.setCurrentLocation(sce.getMap("main").getName());
+        runModel.setCurrentPlayer(Player.getInstance());
         log.log("initial game world with \"" + sce.getName() + "\" settings...");
     }
 

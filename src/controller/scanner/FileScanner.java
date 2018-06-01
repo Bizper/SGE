@@ -37,7 +37,11 @@ public class FileScanner {
     }
 
     public static MP searchForMP(String path) {
-        return FileParser.parseMP(path);
+        return FileParser.parseMP(path + main + MP_SUFFIX);
+    }
+
+    public static MP searchForMP(String path, String filename) {
+        return FileParser.parseMP(path + filename + MP_SUFFIX);
     }
 
 }

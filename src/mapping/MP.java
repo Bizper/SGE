@@ -23,6 +23,14 @@ public class MP implements DefaultConstant {
         }
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Block get(int x, int y) {
         return list[x][y];
     }

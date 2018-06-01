@@ -1,5 +1,6 @@
 package screen;
 
+import controller.model.RunModel;
 import util.Log;
 
 import java.awt.*;
@@ -25,9 +26,9 @@ public class Display {
     private void init() {
         log.log("initial " + Display.class.getName());
 
-        location.setBounds(10, 10, 100, 10);
-        status.setBounds(10, 30, 100, 10);
-        player.setBounds(620, 10, 100, 10);
+        location.setBounds(10, 10, 600, 10);
+        status.setBounds(10, 30, 600, 10);
+        player.setBounds(620, 10, 300, 10);
         message.setBounds(10, 50, 600, 400);
         message.setEditable(false);
         panel.setLayout(null);
@@ -61,6 +62,13 @@ public class Display {
 
     public Display append(String str) {
         message.append(str + "\n");
+        return this;
+    }
+
+    public Display append(RunModel runModel) {
+        setLocation(runModel.getCurrentLocation());
+        player.setText("PLAYER:" + runModel.getCurrentPlayer().getName());
+        append();
         return this;
     }
 

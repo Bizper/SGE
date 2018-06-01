@@ -81,6 +81,9 @@ public class ConceptFactory {
 
     private synchronized static Concept getNewInstance() {
         Concept concept = (Concept) getModel();
+        if(concept == null) {
+            return null;
+        }
         concept.create();
         log.log("creating model: " + concept);
         Proc.register(concept);
