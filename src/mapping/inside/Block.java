@@ -1,6 +1,7 @@
 package mapping.inside;
 
 import constant.BlockType;
+import util.RandomUtil;
 
 public class Block {
 
@@ -22,6 +23,10 @@ public class Block {
 
     public void setProp(BlockType prop) {
         this.prop = prop;
+    }
+
+    public Block() {
+        this(RandomUtil.getBoolean() ? "VERICAL" : "PUNPEI", BlockType.NORMAL);
     }
 
     public Block(String name, BlockType prop) {

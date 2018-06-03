@@ -1,16 +1,15 @@
 package controller;
 
 import controller.model.RunModel;
+import controller.scanner.FileScanner;
 import controller.scanner.MapLoader;
+import controller.task.TaskManager;
 import impl.Player;
 import mapping.SCE;
 import screen.BufferedScreen;
 import screen.Display;
 import service.Proc;
 import util.Log;
-
-import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
 
 public class Dependence {
 
@@ -37,24 +36,34 @@ public class Dependence {
         log.log("initiate " + Dependence.class.getName() + " for logic progress.");
         load();
         display = Display.getInstance();
-        task = TaskManager.getInstance().addTask((e) -> deal(), 1000/60, "DEFAULT");
+        task = TaskManager.getInstance().addTask((e) -> flush(), 1000/60, "DEFAULT");
         log.log(Dependence.class.getName() + " initiation complete.");
     }
 
-    private void deal() {
+    private void flush() {
         display.append(runModel);
     }
 
     private void load() {
+        log.log("start initial world...");
+
         runModel = new RunModel();
         SCE sce = MapLoader.load("./");
         if(sce == null) {
             log.error("empty SCE file.");
             return;
         }
-        runModel.setCurrentLocation(sce.getMap("main").getName());
+        runModel.setSentences(sce.getSentences());
+        runModel.setMP(FileScanner.searchForMP("./", sce.getMap("main")));
         runModel.setCurrentPlayer(Player.getInstance());
+        runModel.setStep(sce.getStart());
+
         log.log("initial game world with \"" + sce.getName() + "\" settings...");
+    }
+
+    private void doNext() {
+        runModel.doNext();
+        BufferedScreen.write(runModel.getWords());
     }
 
     public static void interrupt(int code) {
@@ -69,6 +78,8 @@ public class Dependence {
      * 0x2a 将字符串写入缓冲区
      * 0x3a 清空消息栏
      * 0x3b 清空当前缓冲区
+     * 0x4a 进行游戏的下一步
+     * 0x4b 进行当前动作
      * 0x9a 强制退出程序
      */
     public static void interrupt(int code, String buffer) {
@@ -94,6 +105,11 @@ public class Dependence {
                 break;
             case 0x3b:
                 BufferedScreen.clear();
+                break;
+            case 0x4a:
+                dependence.doNext();
+                break;
+            case 0x4b:
                 break;
             case 0x9a:
                 Exiter.exit(Dependence.class);

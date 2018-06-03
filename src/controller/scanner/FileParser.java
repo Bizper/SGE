@@ -63,7 +63,7 @@ public class FileParser {
             return null;
         }
         setProgress(path, MIN_PROGRESS);
-        String cache = "";
+        String cache;
         StringBuilder stringBuilder = new StringBuilder();
         br = init(file);
         if(br == null) return plr;
@@ -82,7 +82,7 @@ public class FileParser {
     }
 
     public static MP parseMP(String path) {
-        MP mp = null;
+        MP mp;
         File file = new File(path);
         if(!path.endsWith(".mp")) {
             log.error("not current MP file. check your file location.");
@@ -91,8 +91,13 @@ public class FileParser {
         setProgress(path, MIN_PROGRESS);
         String name = "";
         Block list[][] = new Block[DefaultConstant.MAX_MAP_SIZE][DefaultConstant.MAX_MAP_SIZE];
+        for(int i=0; i<DefaultConstant.MAX_MAP_SIZE; i++) {
+            for(int j=0; j<DefaultConstant.MAX_MAP_SIZE; j++) {
+                list[i][j] = new Block();
+            }
+        }
         mp = new MP(name, list);
-        String cache = "";
+        String cache;
         br = init(file);
         if(br == null) return mp;
         try {
@@ -125,17 +130,9 @@ public class FileParser {
         StringBuilder stringBuilder = new StringBuilder();
         char list[] = str.toCharArray();
         boolean isKey = true;
-        String key = null, value = null;
+        String key = null, value;
         if(list[0] == '.') {
-            for(int i=1; i<list.length; i++) {
-                if(list[i] == ' ' && isKey) {
-                    isKey = false;
-                    key = stringBuilder.toString();
-                    stringBuilder.delete(0, stringBuilder.length());
-                    continue;
-                }
-                stringBuilder.append(list[i]);
-            }
+            key = getInside(stringBuilder, isKey, key, list);
             value = stringBuilder.toString();
             if(key == null) {
                 return sce;
@@ -151,8 +148,10 @@ public class FileParser {
                     sce.setMain(Boolean.getBoolean(value));
                     break;
                 case "mp":
-                    MP mp = FileScanner.searchForMP("./", value);
-                    sce.addMap(value, mp);
+                    sce.addMap(value, value);
+                    break;
+                case "start":
+                    sce.setStart(Integer.parseInt(value));
                     break;
             }
             return sce;
@@ -236,15 +235,7 @@ public class FileParser {
         String key = null, value;
         char list[] = str.toCharArray();
         if(list[0] == '.') {
-            for(int i=1; i<list.length; i++) {
-                if(list[i] == ' ' && isKey) {
-                    isKey = false;
-                    key = stringBuilder.toString();
-                    stringBuilder.delete(0, stringBuilder.length());
-                    continue;
-                }
-                stringBuilder.append(list[i]);
-            }
+            key = getInside(stringBuilder, isKey, key, list);
             value = stringBuilder.toString();
             if(key == null) {
                 return mp;
@@ -258,6 +249,18 @@ public class FileParser {
         return mp;
     }
 
+    private static String getInside(StringBuilder stringBuilder, boolean isKey, String key, char[] list) {
+        for(int i=1; i<list.length; i++) {
+            if(list[i] == ' ' && isKey) {
+                isKey = false;
+                key = stringBuilder.toString();
+                stringBuilder.delete(0, stringBuilder.length());
+                continue;
+            }
+            stringBuilder.append(list[i]);
+        }
+        return key;
+    }
 
 
 }

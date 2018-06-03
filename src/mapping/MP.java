@@ -18,7 +18,7 @@ public class MP implements DefaultConstant {
         this.name = name;
         for(int i=0; i<MAX_MAP_SIZE; i++) {
             for(int j=0; j<MAX_MAP_SIZE; j++) {
-                list[i][j] = list[i][j];
+                this.list[i][j] = list[i][j];
             }
         }
     }

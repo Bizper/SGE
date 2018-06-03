@@ -16,9 +16,11 @@ public class SCE {
 
     private boolean main;
 
+    private int start;
+
     private boolean empty = true;
 
-    private Map<String, MP> maps = new HashMap<>();
+    private Map<String, String> maps = new HashMap<>();
 
     private Map<Integer, String> sentences = new HashMap<>();
 
@@ -45,16 +47,29 @@ public class SCE {
         return this;
     }
 
+    public int getStart() {
+        return start;
+    }
+
+    public SCE setStart(int start) {
+        this.start = start;
+        return this;
+    }
+
     public String getWords(int id) {
         return sentences.get(id);
     }
 
-    public SCE addMap(String id, MP mp) {
+    public Map<Integer, String> getSentences() {
+        return sentences;
+    }
+
+    public SCE addMap(String id, String mp) {
         maps.put(id, mp);
         return this;
     }
 
-    public MP getMap(String id) {
+    public String getMap(String id) {
         return maps.get(id);
     }
 

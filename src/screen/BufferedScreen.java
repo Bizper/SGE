@@ -8,22 +8,27 @@ public class BufferedScreen {
 
     private static char text[] = new char[size];
 
-    private static Display display = Display.getInstance();
-
     public static void setBufferSize(int size) {
         text = null;
         text = new char[size];
         BufferedScreen.size = size;
+        System.gc();
     }
 
     public static String write(String str) {
-        if(str.length() < size) text = str.toCharArray();
+        if(str == null || str.isEmpty()) {
+            return str;
+        }
+        if(str.length() > size) {
+            setBufferSize(str.length());
+        }
+        text = str.toCharArray();
         isModified = true;
         return str;
     }
 
     public static boolean isChange() {
-        return isModified;
+        return isModified ;
     }
 
     public static String get() {

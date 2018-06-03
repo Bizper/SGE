@@ -108,6 +108,9 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
 
     @Override
     public GameUnit setOwner(GameUnit unit) {
+        if(getStatus() == StatusType.STATUS_NON_CONTROL || getStatus() == StatusType.STATUS_NON_SHOW) {
+            return this;
+        }
         this.owner = unit;
         return this;
     }

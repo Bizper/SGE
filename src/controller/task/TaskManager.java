@@ -1,7 +1,8 @@
-package controller;
+package controller.task;
 
 import constant.DefaultConstant;
 import intf.task.Task;
+import intf.task.Tasker;
 import util.Log;
 
 import java.util.LinkedList;
@@ -11,7 +12,7 @@ public class TaskManager {
 
     private static Log log = Log.getInstance(TaskManager.class);
 
-    private List<Timer> list = new LinkedList<>();
+    private List<Tasker> list = new LinkedList<>();
 
     private static TaskManager tm;
 
@@ -24,15 +25,34 @@ public class TaskManager {
 
     //default runtime = 1000/60
     public <T> int addTask(Task<T> task, String name) {
+        return addTask(task, DefaultConstant.FRAME_PER_SECOND, name);
+    }
+
+    public <T> int addTask(Task<T> task, int runtime, String name) {
+        return addTask(task, null, runtime, name);
+    }
+
+    public <T> int addTask(Task<T> task, T t, int runtime, String name) {
         Timer<T> timer = new Timer<>(name);
+        timer.setTask(task);
+        timer.setRuntime(runtime);
+        timer.setObject(t);
+        timer.start();
+        list.add(timer);
+        return list.indexOf(timer);
+    }
+
+    //add timed task
+    public <T> int addTimedTask(Task<T> task, String name) {
+        TimedTimer<T> timer = new TimedTimer<>(name);
         timer.setTask(task);
         timer.start();
         list.add(timer);
         return list.indexOf(timer);
     }
 
-    public <T> int addTask(Task<T> task, int runtime, String name) {
-        Timer<T> timer = new Timer<>(name);
+    public <T> int addTimedTask(Task<T> task, int runtime, String name) {
+        TimedTimer<T> timer = new TimedTimer<>(name);
         timer.setTask(task);
         timer.setRuntime(runtime);
         timer.start();
@@ -40,8 +60,8 @@ public class TaskManager {
         return list.indexOf(timer);
     }
 
-    public <T> int addTask(Task<T> task, T t, int runtime, String name) {
-        Timer<T> timer = new Timer<>(name);
+    public <T> int addTimedTask(Task<T> task, T t, int runtime, String name) {
+        TimedTimer<T> timer = new TimedTimer<>(name);
         timer.setTask(task);
         timer.setRuntime(runtime);
         timer.setObject(t);
@@ -57,7 +77,7 @@ public class TaskManager {
 
     public void closeAll() {
         log.log("closing all tasks...");
-        for(Timer timer : list) {
+        for(Tasker timer : list) {
             timer.close();
         }
     }
@@ -65,14 +85,14 @@ public class TaskManager {
     public void printAll() {
         StringBuilder stringBuilder = new StringBuilder("TaskList: ");
         stringBuilder.append("\n").append("ID").append(" ").append("NAME").append("\n");
-        for(Timer timer : list) {
+        for(Tasker timer : list) {
             stringBuilder.append(list.indexOf(timer)).append(" ").append(timer).append("\n");
         }
         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         log.log(stringBuilder.toString());
     }
 
-    private class Timer<T> extends Thread {
+    private class Timer<T> extends Thread implements Tasker {
 
         private String name;
         private T t;
@@ -119,6 +139,63 @@ public class TaskManager {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+        }
+
+        public String toString() {
+            return name;
+        }
+
+    }
+
+    private class TimedTimer<T> extends Thread implements Tasker  {
+
+        private String name;
+        private T t;
+        private Task<T> task;
+        private int runtime = DefaultConstant.FRAME_PER_SECOND;
+
+        public TimedTimer(String name) {
+            this.name = name;
+        }
+
+        public void close() {
+            try {
+                this.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public TimedTimer setRuntime(int runtime) {
+            this.runtime = runtime;
+            return this;
+        }
+
+        public TimedTimer setTask(Task<T> task) {
+            this.task = task;
+            return this;
+        }
+
+        public Task<T> getTask() {
+            return task;
+        }
+
+        public TimedTimer setObject(T t) {
+            this.t = t;
+            return this;
+        }
+
+        public T getObject() {
+            return t;
+        }
+
+        public void run() {
+            try {
+                Thread.sleep(runtime);
+                task.action(t);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
 
