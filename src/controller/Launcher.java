@@ -1,5 +1,7 @@
 package controller;
 
+import controller.task.TaskManager;
+import javafx.stage.Stage;
 import screen.Win;
 import util.Log;
 
@@ -9,8 +11,8 @@ public class Launcher {
 
     public static void main(String args[]) {
         log.log("game launcher started...");
-        Win.launch();
         Dependence.launch();
+        TaskManager.getInstance().addTimedTask((e) -> Win.start(), 5, "PRINT");
         log.log("initiation complete. start listening event message...");
     }
 

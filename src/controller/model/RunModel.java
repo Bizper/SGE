@@ -3,6 +3,7 @@ package controller.model;
 import impl.Player;
 import mapping.MP;
 import mapping.inside.Block;
+import util.DateUtil;
 import util.Log;
 
 import java.util.HashMap;
@@ -13,6 +14,8 @@ public class RunModel {
     private static Log log = Log.getInstance(RunModel.class);
 
     private Player currentPlayer;
+
+    private long time = 0L;
 
     private MP currentMp;
 
@@ -42,6 +45,15 @@ public class RunModel {
 
     public RunModel setSentences(Map<Integer, String> sentences) {
         this.sentences = sentences;
+        return this;
+    }
+
+    public String getTime() {
+        return DateUtil.getTime(time);
+    }
+
+    public RunModel timePlus() {
+        this.time += 1;
         return this;
     }
 

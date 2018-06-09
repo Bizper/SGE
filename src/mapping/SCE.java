@@ -94,4 +94,18 @@ public class SCE {
         this.plr = plr;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "SCE [" +
+                "plr=" + plr +
+                ", name='" + name + '\'' +
+                ", version=" + version +
+                ", main=" + main +
+                ", start=" + start +
+                ", empty=" + empty +
+                ", maps=" + maps +
+                ", sentences=" + sentences +
+                ']';
+    }
 }

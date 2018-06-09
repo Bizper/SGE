@@ -17,8 +17,6 @@ public class Dependence {
 
     private static Dependence dependence;
 
-    private static Display display;
-
     private int task = 0;
 
     private RunModel runModel;
@@ -27,7 +25,7 @@ public class Dependence {
         init();
     }
 
-    static Dependence launch() {
+    public static Dependence launch() {
         if(dependence == null) dependence = new Dependence();
         return dependence;
     }
@@ -35,13 +33,16 @@ public class Dependence {
     private void init() {
         log.log("initiate " + Dependence.class.getName() + " for logic progress.");
         load();
-        display = Display.getInstance();
-        task = TaskManager.getInstance().addTask((e) -> flush(), 1000/60, "DEFAULT");
+        task = TaskManager.getInstance().addTask((e) -> runModel.timePlus(), 1000, "TIME");
         log.log(Dependence.class.getName() + " initiation complete.");
     }
 
     private void flush() {
-        display.append(runModel);
+        try {
+            Display.render(runModel);
+        } catch(NullPointerException npe) {
+            log.error("Display Panel hasn't been initiated.");
+        }
     }
 
     private void load() {
@@ -98,13 +99,11 @@ public class Dependence {
                 Proc.printAll();
                 break;
             case 0x2a:
-                BufferedScreen.write(buffer);
                 break;
             case 0x3a:
-                display.clear();
+                //display.clear();
                 break;
             case 0x3b:
-                BufferedScreen.clear();
                 break;
             case 0x4a:
                 dependence.doNext();

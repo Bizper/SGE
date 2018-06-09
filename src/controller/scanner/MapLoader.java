@@ -21,4 +21,8 @@ public class MapLoader {
         return FileScanner.searchForSCE(path, filename);
     }
 
+    public static double getLoadProgress() {
+        return FileParser.getProgress();
+    }
+
 }

@@ -2,9 +2,12 @@ package screen;
 
 import controller.Dependence;
 import controller.model.RunModel;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextArea;
 import util.Log;
-
-import java.awt.*;
 
 public class Display {
 
@@ -12,92 +15,67 @@ public class Display {
 
     private static Display display;
 
-    private Panel panel;
-
-    private Label location = new Label("LOCATION：");
-    private Label status = new Label("STATUS：");
-    private Label player = new Label("PLAYER：");
-
-    private Button next = new Button("NEXT");
-    private Button action = new Button("ACTION");
-
-    private TextArea message = new TextArea("", 600, 500, TextArea.SCROLLBARS_NONE);
-
-    private Display(Panel panel) {
-       this.panel = panel;
-       init();
+    void setInstance(Display display) {
+        Display.display = display;
     }
 
-    private void init() {
-        log.log("initial " + Display.class.getName());
+    @FXML
+    private Label location;
 
-        location.setBounds(10, 10, 600, 10);
-        status.setBounds(10, 30, 600, 10);
-        player.setBounds(620, 10, 300, 10);
-        message.setBounds(10, 50, 600, 400);
-        next.setBounds(10, 470, 50, 20);
-        action.setBounds(110, 470, 50, 20);
-        next.addActionListener((e) -> Dependence.interrupt(0x4a));
-        action.addActionListener((e) -> Dependence.interrupt(0x4b));
-        message.setEditable(false);
-        panel.setLayout(null);
-        panel.add(location);
-        panel.add(player);
-        panel.add(status);
-        panel.add(message);
-        panel.add(next);
-        panel.add(action);
+    @FXML
+    private TextArea script_msg;
 
-        log.log(Display.class.getName() + " initiation complete.");
+    @FXML
+    private TextArea battle_msg;
+
+    @FXML
+    private Label game_time;
+
+    @FXML
+    private Label desc;
+
+    @FXML
+    private Label operation;
+
+    @FXML
+    private ProgressBar progress;
+
+    @FXML
+    public void doNext(ActionEvent e) {
+        Dependence.interrupt(0x4a);
     }
 
-    public static Display getInstance(Panel panel) {
-        if(display == null) display = new Display(panel);
-        return display;
+    @FXML
+    public void doAction(ActionEvent e) {
+
     }
 
-    public static Display getInstance() {
-        if(display == null) return null;
-        return display;
+    void apendScript(String str) {
+        script_msg.appendText(str);
     }
 
-    public Display clear() {
-        message.setText("");
-        return this;
+    public void setLocation(String str) {
+        location.setText(str);
     }
 
-    public Display setLocation(String title) {
-        location.setText("LOCATION："+title);
-        return this;
+    public void setTime(String str) {
+        game_time.setText(str);
     }
 
-    public Display setAction(String str) {
-        action.setLabel(str);
-        return this;
+    public void setDesc(String str) {
+        desc.setText(str);
     }
 
-    public Display setNext(String str) {
-        next.setLabel(str);
-        return this;
+    //range from 0.0 - 1.0
+    public void setProgress(double proc, String opr) {
+        progress.setProgress(proc);
+        operation.setText(opr);
     }
 
-    public Display append(String str) {
-        message.append(str + "\n");
-        return this;
-    }
-
-    public Display append(RunModel runModel) {
-        setLocation(runModel.getCurrentLocation());
-        player.setText("PLAYER：" + runModel.getCurrentPlayer().getName());
-        append();
-        return this;
-    }
-
-    public Display append() {
-        if(BufferedScreen.isChange()) {
-            message.append(BufferedScreen.get() + "\n");
-        }
-        return this;
+    public static void render(RunModel runModel) {
+        display.setLocation(runModel.getCurrentMp().getName());
+        display.setTime(runModel.getTime());
+        if(BufferedScreen.isChange()) display.apendScript(BufferedScreen.get());
     }
 
 }

@@ -47,11 +47,8 @@ public interface DefaultConstant {
     /**
      * WINDOWS PROPERTIES
      */
-    int WIN_X = 200;
 
-    int WIN_Y = 200;
-
-    int WIN_WIDTH = 1024;
+    int WIN_WIDTH = 1280;
 
     int WIN_HEIGHT = 768;
 

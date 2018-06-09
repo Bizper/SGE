@@ -4,4 +4,8 @@ public interface Tasker {
 
     void close();
 
+    int getID();
+
+    boolean isRunning();
+
 }

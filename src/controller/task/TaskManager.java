@@ -5,6 +5,7 @@ import intf.task.Task;
 import intf.task.Tasker;
 import util.Log;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,9 +15,15 @@ public class TaskManager {
 
     private List<Tasker> list = new LinkedList<>();
 
+    private ArrayList<Integer> closed = new ArrayList<>();
+
     private static TaskManager tm;
 
-    private TaskManager() {}
+    private static double capity = 0.35;
+
+    private TaskManager() {
+        addTimedTask((e) -> clear(), 14*1000, "CLEANING");
+    }
 
     public static TaskManager getInstance() {
         if(tm == null) tm = new TaskManager();
@@ -32,6 +39,10 @@ public class TaskManager {
         return addTask(task, null, runtime, name);
     }
 
+    public <T> int addTask(Task<T> task, int runtime) {
+        return addTask(task, null, runtime, "DEFAULT");
+    }
+
     public <T> int addTask(Task<T> task, T t, int runtime, String name) {
         Timer<T> timer = new Timer<>(name);
         timer.setTask(task);
@@ -39,25 +50,17 @@ public class TaskManager {
         timer.setObject(t);
         timer.start();
         list.add(timer);
-        return list.indexOf(timer);
+        int id = list.indexOf(timer);
+        timer.setId(id);
+        return id;
     }
 
-    //add timed task
-    public <T> int addTimedTask(Task<T> task, String name) {
-        TimedTimer<T> timer = new TimedTimer<>(name);
-        timer.setTask(task);
-        timer.start();
-        list.add(timer);
-        return list.indexOf(timer);
+    public <T> int addTimedTask(Task<T> task, int runtime) {
+        return addTimedTask(task, runtime, "DEFAULT");
     }
 
     public <T> int addTimedTask(Task<T> task, int runtime, String name) {
-        TimedTimer<T> timer = new TimedTimer<>(name);
-        timer.setTask(task);
-        timer.setRuntime(runtime);
-        timer.start();
-        list.add(timer);
-        return list.indexOf(timer);
+        return addTimedTask(task, null, runtime, name);
     }
 
     public <T> int addTimedTask(Task<T> task, T t, int runtime, String name) {
@@ -67,12 +70,15 @@ public class TaskManager {
         timer.setObject(t);
         timer.start();
         list.add(timer);
-        return list.indexOf(timer);
+        int id = list.indexOf(timer);
+        timer.setId(id);
+        return id;
     }
 
     public void close(int id) {
         log.log("closing " + id + " task...");
         list.get(id).close();
+        list.remove(id);
     }
 
     public void closeAll() {
@@ -80,13 +86,29 @@ public class TaskManager {
         for(Tasker timer : list) {
             timer.close();
         }
+        list.clear();
+    }
+
+    private void clear() {
+        log.log("clearing stopped task...");
+        for(Tasker timer : list) {
+            if(!timer.isRunning() && !closed.contains(timer.getID())) {
+                closed.add(timer.getID());
+            }
+        }
+        double prec = (double)closed.size() / (double)list.size();
+        if(prec > capity) {
+            for(int i : closed) {
+                list.remove(list.get(i));
+            }
+        }
     }
 
     public void printAll() {
-        StringBuilder stringBuilder = new StringBuilder("TaskList: ");
-        stringBuilder.append("\n").append("ID").append(" ").append("NAME").append("\n");
+        StringBuilder stringBuilder = new StringBuilder("\nTaskList: ");
+        stringBuilder.append("\n").append("ID").append(" ").append("NAME").append(" ").append("STATUS").append("\n");
         for(Tasker timer : list) {
-            stringBuilder.append(list.indexOf(timer)).append(" ").append(timer).append("\n");
+            stringBuilder.append(timer).append("\n");
         }
         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         log.log(stringBuilder.toString());
@@ -94,14 +116,34 @@ public class TaskManager {
 
     private class Timer<T> extends Thread implements Tasker {
 
+        private int id;
         private String name;
         private T t;
         private Task<T> task;
         private boolean flag = true;
         private int runtime = DefaultConstant.FRAME_PER_SECOND;
+        private boolean running = true;
+
+        public boolean isRunning() {
+            return running;
+        }
+
+        public Timer<T> setRunning(boolean running) {
+            this.running = running;
+            return this;
+        }
 
         public Timer(String name) {
             this.name = name;
+        }
+
+        public Timer<T> setId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public int getID() {
+            return id;
         }
 
         public Timer setRuntime(int runtime) {
@@ -111,6 +153,7 @@ public class TaskManager {
 
         public void close() {
             flag = false;
+            setRunning(false);
         }
 
         public Timer setTask(Task<T> task) {
@@ -143,28 +186,44 @@ public class TaskManager {
         }
 
         public String toString() {
-            return name;
+            return id + " " + name + " " + (isRunning() ? "RUNNING" : "STOP");
         }
 
     }
 
     private class TimedTimer<T> extends Thread implements Tasker  {
 
+        private int id;
         private String name;
         private T t;
         private Task<T> task;
         private int runtime = DefaultConstant.FRAME_PER_SECOND;
+        private boolean running = true;
+
+        public boolean isRunning() {
+            return running;
+        }
+
+        public TimedTimer<T> setRunning(boolean running) {
+            this.running = running;
+            return this;
+        }
 
         public TimedTimer(String name) {
             this.name = name;
         }
 
+        public TimedTimer<T> setId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public int getID() {
+            return id;
+        }
+
         public void close() {
-            try {
-                this.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            setRunning(false);
         }
 
         public TimedTimer setRuntime(int runtime) {
@@ -194,13 +253,14 @@ public class TaskManager {
             try {
                 Thread.sleep(runtime);
                 task.action(t);
+                close();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
         public String toString() {
-            return name;
+            return id + " " + name + " " + (isRunning() ? "RUNNING" : "STOP");
         }
 
     }

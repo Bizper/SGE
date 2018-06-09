@@ -2,6 +2,7 @@ package util;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.HashMap;
 
 public class Log {
 
@@ -17,6 +18,20 @@ public class Log {
     2 output to remote file(in plan)
      */
     private static int mode = 0;
+
+    private static HashMap<Integer, String> list = new HashMap<>();
+
+    private static String ERROR = "ERROR";
+
+    private static String NORMAL = "NORMAL";
+
+    private static String WARNING = "WARNING";
+
+    static {
+        list.put(0, ERROR);
+        list.put(1, NORMAL);
+        list.put(2, WARNING);
+    }
 
     private Log(Class<?> cls) {
         this.classes = cls;
@@ -53,22 +68,32 @@ public class Log {
     }
 
     public void error(Object obj) {
-        print("ERROR", mode, obj);
+        print(0, mode, obj);
     }
 
     public void log(Object obj) {
-        print("NORMAL", mode, obj);
+        print(1, mode, obj);
     }
 
     public void warning(Object obj) {
-        print("WARNING", mode, obj);
+        print(2, mode, obj);
     }
 
-    private void print(String level, int mode, Object obj) {
-        String output = "[" + level + "][" + DateUtil.getHour() + "][" + classes.getName() + "] " + obj;
+    private void print(int level, int mode, Object obj) {
+        String output = "[" + list.get(level) + "][" + DateUtil.getHour() + "][" + classes.getName() + "] " + obj;
         switch(mode) {
             case 0:
-                System.out.println(output);
+                switch(level) {
+                    case 1:
+                        norPrint(output);
+                        break;
+                    case 0:
+                        errPrint(output);
+                        break;
+                    case 2:
+                        errPrint(output);
+                        break;
+                }
                 break;
             case 1:
                 try {
@@ -86,6 +111,14 @@ public class Log {
                 print(level, 0, obj);
                 break;
         }
+    }
+
+    private void errPrint(String out) {
+        System.err.println(out);
+    }
+
+    private void norPrint(String out) {
+        System.out.println(out);
     }
 
 }

@@ -12,6 +12,13 @@ public class DateUtil {
         return sf.format(new Date());
     }
 
+    public static String getTime(long time) {
+        if(time < 60) return String.valueOf(time) + "s";
+        else {
+            return String.valueOf(time / 60) + "m" + String.valueOf(time % 60) + "s";
+        }
+    }
+
     public static String getHour() {
         return hour.format(new Date());
     }

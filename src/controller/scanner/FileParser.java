@@ -1,6 +1,7 @@
 package controller.scanner;
 
 import constant.DefaultConstant;
+import controller.Exiter;
 import impl.action.Spell;
 import intf.GameAction;
 import mapping.*;
@@ -10,6 +11,7 @@ import service.Proc;
 import util.Log;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,8 +21,6 @@ public class FileParser {
 
     private static double MIN_PROGRESS = 0.0;
     private static double MAX_PROGRESS = 100.0;
-
-    private static BufferedReader br;
 
     private static double progress = MIN_PROGRESS;
 
@@ -42,14 +42,22 @@ public class FileParser {
         }
         setProgress(path, MIN_PROGRESS);
         String cache;
-        br = init(file);
+        BufferedReader br = init(file);
+        int count = 0, current = 0;
         if(br == null) return sce;
         try {
+            while(br.readLine() != null) {
+                count++;
+            }
+            br = init(file);
             while((cache = br.readLine()) != null) {
+                setProgress(path, current/count);
                 sce = parseSCE(cache, sce);
+                current ++;
             }
         } catch (IOException e) {
             log.error(e);
+            //Exiter.exit(FileParser.class);
         }
         setProgress(path, MAX_PROGRESS);
         return sce;
@@ -65,7 +73,7 @@ public class FileParser {
         setProgress(path, MIN_PROGRESS);
         String cache;
         StringBuilder stringBuilder = new StringBuilder();
-        br = init(file);
+        BufferedReader br = init(file);
         if(br == null) return plr;
         try {
             while((cache = br.readLine()) != null) {
@@ -98,7 +106,7 @@ public class FileParser {
         }
         mp = new MP(name, list);
         String cache;
-        br = init(file);
+        BufferedReader br = init(file);
         if(br == null) return mp;
         try {
             while((cache = br.readLine()) != null) {
