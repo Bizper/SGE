@@ -12,6 +12,7 @@ import util.Log;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class FileParser {
     private static Log log = Log.getInstance(FileParser.class);
 
     private static double MIN_PROGRESS = 0.0;
-    private static double MAX_PROGRESS = 100.0;
+    private static double MAX_PROGRESS = 1.0;
 
     private static double progress = MIN_PROGRESS;
 
@@ -51,7 +52,7 @@ public class FileParser {
             }
             br = init(file);
             while((cache = br.readLine()) != null) {
-                setProgress(path, current/count);
+                setProgress(path, (double)current/(double)count);
                 sce = parseSCE(cache, sce);
                 current ++;
             }
@@ -70,7 +71,6 @@ public class FileParser {
             log.error("not current PLR file. check your file location.");
             return null;
         }
-        setProgress(path, MIN_PROGRESS);
         String cache;
         StringBuilder stringBuilder = new StringBuilder();
         BufferedReader br = init(file);
@@ -83,7 +83,7 @@ public class FileParser {
             log.error(e);
         }
         cache = stringBuilder.toString();
-        setProgress(path, 50.0);
+        setProgress(path, 0.5);
         plr = parsePLR(cache, plr);
         setProgress(path, MAX_PROGRESS);
         return plr;
@@ -129,6 +129,8 @@ public class FileParser {
 
     private static void setProgress(String message, double p) {
         if(p > MAX_PROGRESS) p = MAX_PROGRESS;
+        DecimalFormat df = new DecimalFormat("#");
+        p = Double.parseDouble(df.format(p * 100));
         log.log("parsing \"" + message + "\" progress: " + p + "%");
         progress = p;
     }

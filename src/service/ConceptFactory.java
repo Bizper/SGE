@@ -40,7 +40,6 @@ public class ConceptFactory {
     }
 
     public synchronized static <T> T getInstance(Class<T> cls) {
-        log.log("receive model: " + cls);
         DEFAULT_CLASS = cls;
         return (T) getNewInstance();
     }
@@ -51,7 +50,7 @@ public class ConceptFactory {
             return null;
         }
         concept.create();
-        log.log("creating model: " + concept);
+        log.log("creating model: " + concept.getClass().getName());
         Proc.register(concept);
         return concept;
     }
