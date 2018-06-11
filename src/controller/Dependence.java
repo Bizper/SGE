@@ -11,44 +11,46 @@ import screen.Display;
 import service.Proc;
 import util.Log;
 
+/**
+ * 整个游戏系统的核心，称为依赖(Dependence)。
+ * 通过使用中断(interrupt)方法来控制整个程序的运行。
+ */
 public class Dependence {
 
     private static Log log = Log.getInstance(Dependence.class);
 
     private static Dependence dependence;
 
-    private int task = 0;
-
     private RunModel runModel;
+
+    private Display display;
+
+    private int task = 0;//记录核心任务的id
 
     private Dependence() {
         init();
     }
 
-    public static Dependence launch() {
+    static Dependence launch() {
         if(dependence == null) dependence = new Dependence();
         return dependence;
     }
 
     private void init() {
-        log.log("initiate " + Dependence.class.getName() + " for logic progress.");
+        log.log("initiate System core for logic progress.");
+        display = Display.getInstance();
         load();
-        task = TaskManager.getInstance().addTask((e) -> runModel.timePlus(), 1000, "TIME");
-        log.log(Dependence.class.getName() + " initiation complete.");
-    }
-
-    private void flush() {
-        try {
-            Display.render(runModel);
-        } catch(NullPointerException npe) {
-            log.error("Display Panel hasn't been initiated.");
-        }
+        task = TaskManager.getInstance().addTask((e) -> {
+            runModel.timePlus();
+            flush();
+        }, 1000, "TIME");
+        log.log("System core initiation complete.");
     }
 
     private void load() {
         log.log("start initial world...");
-
-        runModel = new RunModel();
+        log.log("construct game world...");
+        runModel = RunModel.getInstance();
         SCE sce = MapLoader.load("./");
         if(sce == null) {
             log.error("empty SCE file.");
@@ -67,6 +69,26 @@ public class Dependence {
         BufferedScreen.write(runModel.getWords());
     }
 
+    private void doAction() {
+
+    }
+
+    private void clear() {
+        display.clear();
+    }
+
+    public void flush() {
+        if(display == null) {
+            log.error("Display Panel has't benn initiated.");
+            Exiter.exit();
+        }
+        display.flush();
+    }
+
+    /**
+     * to use different interrupt codes, control this system.
+     * @param code interrupt code.
+     */
     public static void interrupt(int code) {
         interrupt(code, null);
     }
@@ -82,6 +104,8 @@ public class Dependence {
      * 0x4a 进行游戏的下一步
      * 0x4b 进行当前动作
      * 0x9a 强制退出程序
+     * @param code interrupt code
+     * @param buffer write into Buffer area
      */
     public static void interrupt(int code, String buffer) {
         log.log("interrupt code: " + code + " with buffer: " + (buffer == null ? "null" : buffer));
@@ -99,19 +123,24 @@ public class Dependence {
                 Proc.printAll();
                 break;
             case 0x2a:
+                BufferedScreen.write(buffer);
                 break;
             case 0x3a:
-                //display.clear();
+                dependence.clear();
                 break;
             case 0x3b:
+                BufferedScreen.clear();
                 break;
             case 0x4a:
                 dependence.doNext();
+                dependence.flush();
                 break;
             case 0x4b:
+                dependence.doAction();
+                dependence.flush();
                 break;
             case 0x9a:
-                Exiter.exit(Dependence.class);
+                Exiter.exit();
                 break;
         }
     }

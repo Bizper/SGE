@@ -11,6 +11,8 @@ import java.util.Map;
 
 public class RunModel {
 
+    private static RunModel runModel;
+
     private static Log log = Log.getInstance(RunModel.class);
 
     private Player currentPlayer;
@@ -24,6 +26,13 @@ public class RunModel {
     private int currentLocation[] = new int[]{0, 0};
 
     private int step = 0;
+
+    private RunModel() {}
+
+    public static RunModel getInstance() {
+        if(runModel == null) runModel = new RunModel();
+        return runModel;
+    }
 
     public MP getCurrentMp() {
         return currentMp;
@@ -48,8 +57,8 @@ public class RunModel {
         return this;
     }
 
-    public String getTime() {
-        return DateUtil.getTime(time);
+    public long getTime() {
+        return time;
     }
 
     public RunModel timePlus() {

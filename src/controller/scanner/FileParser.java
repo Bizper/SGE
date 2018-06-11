@@ -20,10 +20,9 @@ public class FileParser {
 
     private static Log log = Log.getInstance(FileParser.class);
 
-    private static double MIN_PROGRESS = 0.0;
     private static double MAX_PROGRESS = 1.0;
 
-    private static double progress = MIN_PROGRESS;
+    private static double progress;
 
     public static BufferedReader init(File f) {
         try {
@@ -41,7 +40,6 @@ public class FileParser {
             log.error("not current SCE file. check your file location.");
             return null;
         }
-        setProgress(path, MIN_PROGRESS);
         String cache;
         BufferedReader br = init(file);
         int count = 0, current = 0;
@@ -96,7 +94,6 @@ public class FileParser {
             log.error("not current MP file. check your file location.");
             return null;
         }
-        setProgress(path, MIN_PROGRESS);
         String name = "";
         Block list[][] = new Block[DefaultConstant.MAX_MAP_SIZE][DefaultConstant.MAX_MAP_SIZE];
         for(int i=0; i<DefaultConstant.MAX_MAP_SIZE; i++) {

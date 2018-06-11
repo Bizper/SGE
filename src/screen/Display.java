@@ -1,13 +1,13 @@
 package screen;
 
+
 import controller.Dependence;
 import controller.model.RunModel;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextArea;
+import util.DateUtil;
 import util.Log;
+
+import java.awt.*;
+import java.net.URLEncoder;
 
 public class Display {
 
@@ -15,43 +15,71 @@ public class Display {
 
     private static Display display;
 
-    void setInstance(Display display) {
-        Display.display = display;
+    private Panel panel;
+
+    private Display(Panel p) {
+        this.panel = p;
+        init();
     }
 
-    @FXML
-    private Label location;
+    public static Display getInstance() {
+        if(display == null) return null;
+        return display;
+    }
 
-    @FXML
-    private TextArea script_msg;
+    public static Display getInstance(Panel panel) {
+        if(display == null) display = new Display(panel);
+        return display;
+    }
 
-    @FXML
-    private TextArea battle_msg;
+    private Label location = new Label();
+    private Label location_label = new Label("Location：");
+    private Label game_time = new Label();
+    private Label game_time_label = new Label("GameTime：");
+    private Label desc = new Label();
+    private TextArea script_msg = new TextArea();
+    private TextArea battle_msg = new TextArea();
 
-    @FXML
-    private Label game_time;
+    private Button next = new Button("NEXT");
+    private Button action = new Button("ACTION");
 
-    @FXML
-    private Label desc;
+    private void init() {
+        log.log("initiate Display Panel...");
+        location_label.setBounds(14, 14, 70, 30);
+        location.setBounds(84, 14, 100, 30);
+        game_time_label.setBounds(14, 44, 70, 30);
+        game_time.setBounds(84, 44, 60, 30);
+        script_msg.setBounds(14, 79, 777, 296);
+        battle_msg.setBounds(811, 79, 453, 296);
+        next.setBounds(1114, 670, 40, 30);
+        action.setBounds(939, 670, 40, 30);
+        next.addActionListener((e) -> doNext());
+        action.addActionListener((e) -> doAction());
+        panel.add(next);
+        panel.add(action);
+        panel.add(location_label);
+        panel.add(location);
+        panel.add(battle_msg);
+        panel.add(game_time);
+        panel.add(script_msg);
+        panel.add(game_time_label);
+        log.log("Display Panel initiation complete.");
+    }
 
-    @FXML
-    private Label operation;
-
-    @FXML
-    private ProgressBar progress;
-
-    @FXML
-    public void doNext(ActionEvent e) {
+    public void doNext() {
         Dependence.interrupt(0x4a);
     }
 
-    @FXML
-    public void doAction(ActionEvent e) {
-
+    public void doAction() {
+        Dependence.interrupt(0x4b);
     }
 
-    void apendScript(String str) {
-        script_msg.appendText(str);
+    void appendScript(String str) {
+        script_msg.append(str + "\n");
+    }
+
+    void appendBattle(String str) {
+        battle_msg.append(str + "\n");
     }
 
     public void setLocation(String str) {
@@ -66,16 +94,19 @@ public class Display {
         desc.setText(str);
     }
 
-    //range from 0.0 - 1.0
-    public void setProgress(double proc, String opr) {
-        progress.setProgress(proc);
-        operation.setText(opr);
-    }
-
     public static void render(RunModel runModel) {
         display.setLocation(runModel.getCurrentMp().getName());
-        display.setTime(runModel.getTime());
-        if(BufferedScreen.isChange()) display.apendScript(BufferedScreen.get());
+        display.setTime(DateUtil.getTime(runModel.getTime()));
+        if(BufferedScreen.isChange()) display.appendScript(BufferedScreen.get());
+    }
+
+    public void flush() {
+        render(RunModel.getInstance());
+    }
+
+    public void clear() {
+        script_msg.setText("");
+        battle_msg.setText("");
     }
 
 }

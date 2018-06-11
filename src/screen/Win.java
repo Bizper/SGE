@@ -1,46 +1,48 @@
 package screen;
 
+
 import constant.DefaultConstant;
 import controller.Exiter;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import util.Log;
 
-public class Win extends Application implements DefaultConstant {
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+public class Win extends Frame implements DefaultConstant {
 
     private static Log log = Log.getInstance(Win.class);
 
-    @Override
-    public void start(Stage stage) {
-        log.log("initial windows...");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/settings/main.fxml"));
-        Pane p = null;
-        try {
-            p = loader.load();
-        } catch (Exception e) {
-            log.error("windows initiation failed. Can not load Graphics setting file.");
-            Exiter.exit(Win.class);
-        }
-        Scene main = new Scene(p, WIN_WIDTH, WIN_HEIGHT);
-        stage.setScene(main);
-        stage.setResizable(false);
-        stage.setOnCloseRequest(event -> {
-            log.log("closing windows...");
-            stage.hide();
-            Exiter.release();
+    private static Win win;
+
+    public void init() {
+        log.log("initiate windows...");
+        setBounds(200, 200, WIN_WIDTH, WIN_HEIGHT);
+        setTitle("MUD GAME");
+        setResizable(false);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                log.log("closing windows...");
+                Exiter.release();
+            }
         });
-        stage.setTitle(DEFAULT_TITLE);
-        stage.show();
-        Display display = loader.getController();
-        display.setInstance(display);
+        setVisible(true);
+        Panel panel = new Panel();
+        panel.setBounds(0, 0, WIN_WIDTH, WIN_HEIGHT);
+        panel.setLayout(null);
+        add(panel);
+        Display.getInstance(panel);
         log.log("windows initiation complete.");
     }
 
-    public static void start() {
-        Win.launch();
+    public static void launch() {
+        if(win == null) {
+            win = new Win();
+            win.init();
+        }
+        else log.warning("not first of this method called, please warning this windows instance.");
     }
+
 
 }

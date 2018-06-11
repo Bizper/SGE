@@ -5,7 +5,6 @@ import intf.task.Task;
 import intf.task.Tasker;
 import util.Log;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,15 +14,13 @@ public class TaskManager {
 
     private List<Tasker> list = new LinkedList<>();
 
-    private ArrayList<Integer> closed = new ArrayList<>();
+    //private ArrayList<Integer> closed = new ArrayList<>();
 
     private static TaskManager tm;
 
-    private static double capity = 0.35;
+    //private static double capity = 0.35;
 
-    private TaskManager() {
-        addTimedTask((e) -> clear(), 14*1000, "CLEANING");
-    }
+    private TaskManager() { }
 
     public static TaskManager getInstance() {
         if(tm == null) tm = new TaskManager();
@@ -89,6 +86,7 @@ public class TaskManager {
         list.clear();
     }
 
+    /*
     private void clear() {
         log.log("clearing stopped task...");
         for(Tasker timer : list) {
@@ -103,6 +101,7 @@ public class TaskManager {
             }
         }
     }
+    */
 
     public void printAll() {
         StringBuilder stringBuilder = new StringBuilder("\nTaskList: ");

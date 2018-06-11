@@ -12,15 +12,17 @@ public class Exiter {
         log.log("releasing resource...");
         ConfigUtil.saveConstant();
         TaskManager.getInstance().closeAll();
-        exit(Exiter.class);
+        exit();
     }
 
-    public static void exit(Class<?> cls) {
-        if(cls == Exiter.class) {
-            log.log("exit from " + cls.getName());
+    public static void exit() {
+        StackTraceElement elements[] = Thread.currentThread().getStackTrace();
+        String className = elements[2].getClassName();
+        if(className.equals(Exiter.class.getName())) {
+            log.log("exit from " + className);
             System.exit(0);
         } else {
-            log.warning("exit from " + cls.getName());
+            log.warning("dangerous exit from " + className);
             System.exit(1);
         }
     }
