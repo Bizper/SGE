@@ -18,27 +18,19 @@ public class MP implements DefaultConstant {
 
     private Image background;
 
-    private Block list[][] = new Block[MAX_MAP_SIZE][MAX_MAP_SIZE];
+    private Block list[][];
 
     public MP(String name, Block[][] list) {
         this.name = name;
-        for(int i=0; i<MAX_MAP_SIZE; i++) {
-            for(int j=0; j<MAX_MAP_SIZE; j++) {
-                this.list[i][j] = list[i][j];
-            }
-        }
+        this.list = list;
     }
 
     public Image getBackground() {
         return background;
     }
 
-    public MP setBackground(String background) {
-        try {
-            this.background = ImageIO.read(new File(background));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public MP setBackground(Image background) {
+        this.background = background;
         return this;
     }
 

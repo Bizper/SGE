@@ -1,5 +1,6 @@
 package controller.model;
 
+import constant.BlockType;
 import impl.Player;
 import mapping.MP;
 import mapping.inside.Block;
@@ -46,10 +47,6 @@ public class RunModel {
     public RunModel setCurrentMp(MP currentMp) {
         this.currentMp = currentMp;
         return this;
-    }
-
-    public String getCurrentLocation() {
-        return getBlock().getName();
     }
 
     public RunModel setMP(MP mp) {
@@ -111,8 +108,8 @@ public class RunModel {
         return this;
     }
 
-    public Block getBlock() {
-        return currentMp.get(currentLocation[0], currentLocation[1]);
+    public Block getBlock(int x, int y) {
+        return currentMp.get(x, y);
     }
 
     public RunModel setCurrentPlayer(Player currentPlayer) {

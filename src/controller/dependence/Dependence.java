@@ -4,11 +4,13 @@ import controller.Exiter;
 import controller.model.RunModel;
 import controller.scanner.FileScanner;
 import controller.scanner.MapLoader;
+import intf.DefaultConstant;
+import screen.Win;
+import service.AssetManager;
 import service.TaskManager;
 import impl.Player;
 import mapping.SCE;
 import screen.BufferedScreen;
-import screen.Display;
 import service.Proc;
 import util.ConfigUtil;
 import util.Log;
@@ -34,15 +36,18 @@ public class Dependence {
     }
 
     public static void launch() {
-        if (dependence == null) dependence = new Dependence();
+        if(dependence == null) dependence = new Dependence();
     }
 
     private void init() {
         log.log("initiate System core for logic progress.");
+        AssetManager.init();
         this.load();
         task = TaskManager.getInstance().addTask((e) -> {
-            runModel.timePlus();
             flush();
+        }, DefaultConstant.FRAME_PER_SECOND, "FLUSH");
+        TaskManager.getInstance().addTask((e) -> {
+            runModel.timePlus();
         }, 1000, "TIME");
         log.log("System core initiation complete.");
     }
@@ -60,7 +65,6 @@ public class Dependence {
         runModel.setMP(FileScanner.searchForMP(ConfigUtil.getValue("default.package"), sce.getMap("main")));
         runModel.setCurrentPlayer(Player.getInstance());
         runModel.setStep(sce.getStart());
-
         log.log("initial game world with \"" + sce.getName() + "\" settings...");
     }
 
@@ -73,11 +77,7 @@ public class Dependence {
     }
 
     public void flush() {
-        Display.STATIC_FLUSH();
-    }
-
-    private void clear() {
-        Display.STATIC_CLEAR_SCREEN();
+        Win.flush();
     }
 
     /**
@@ -123,7 +123,6 @@ public class Dependence {
                 BufferedScreen.write(buffer);
                 break;
             case CLEAR_MESSAGE:
-
                 break;
             case CLEAR_BUFFER:
                 BufferedScreen.clear();

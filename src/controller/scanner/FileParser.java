@@ -1,9 +1,9 @@
 package controller.scanner;
 
-import intf.DefaultConstant;
 import impl.action.Spell;
 import mapping.*;
 import mapping.inside.Block;
+import service.AssetManager;
 import service.ConceptFactory;
 import service.Proc;
 import util.Log;
@@ -12,6 +12,10 @@ import java.io.*;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
+
+import static intf.DefaultConstant.MAX_MAP_SIZE_HEIGHT;
+import static intf.DefaultConstant.MAX_MAP_SIZE_WIDTH;
+
 
 public class FileParser {
 
@@ -92,9 +96,9 @@ public class FileParser {
             return null;
         }
         String name = "";
-        Block list[][] = new Block[DefaultConstant.MAX_MAP_SIZE][DefaultConstant.MAX_MAP_SIZE];
-        for(int i=0; i<DefaultConstant.MAX_MAP_SIZE; i++) {
-            for(int j=0; j<DefaultConstant.MAX_MAP_SIZE; j++) {
+        Block list[][] = new Block[MAX_MAP_SIZE_WIDTH][MAX_MAP_SIZE_HEIGHT];
+        for(int i=0; i<MAX_MAP_SIZE_WIDTH; i++) {
+            for(int j=0; j<MAX_MAP_SIZE_HEIGHT; j++) {
                 list[i][j] = new Block();
             }
         }
@@ -190,15 +194,14 @@ public class FileParser {
                 list = str.toCharArray();
                 if(id.startsWith("spell")) {
                     Spell spell = ConceptFactory.getInstance(Spell.class);
+                    spell.setName(result.get("SpellName"));
                     if(result.get("SpellType").contains("TARGET") && result.get("SpellType").contains("HURT")) {
-                        spell.setName(result.get("SpellName"));
                         spell.setAction((e, u) -> {
                            e.setMp(e.getMp() - Integer.parseInt(result.get("SpellManaCost")));
                            u.setHp(u.getHp() - Integer.parseInt(result.get("SpellNumber")));
                         });
                     }
                     if(result.get("SpellType").contains("SELF") && result.get("SpellType").contains("HEAL")) {
-                        spell.setName(result.get("SpellName"));
                         spell.setAction((e) -> {
                             e.setMp(e.getMp() - Integer.parseInt(result.get("SpellManaCost")));
                             e.setHp(e.getHp() + Integer.parseInt(result.get("SpellNumber")));
@@ -249,7 +252,7 @@ public class FileParser {
                     mp.setName(value);
                     break;
                 case "background":
-                    mp.setBackground(value);
+                    mp.setBackground(AssetManager.getImage(value));
                     break;
 
             }

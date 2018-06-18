@@ -44,8 +44,6 @@ public interface DefaultConstant {
 
     StatusType DEFAULT_STATUS = StatusType.STATUS_DEFAULT;
 
-    int MAX_MAP_SIZE = 100;
-
     /**
      * WINDOWS PROPERTIES
      */
@@ -61,5 +59,13 @@ public interface DefaultConstant {
      */
 
     int FRAME_PER_SECOND = 1000/60;
+
+    String PATH = "./src/asset/images/";
+
+    int DEFAULT_BLOCK_SIZE = 20;
+
+    int MAX_MAP_SIZE_WIDTH = WIN_WIDTH/DEFAULT_BLOCK_SIZE;
+
+    int MAX_MAP_SIZE_HEIGHT = WIN_HEIGHT/DEFAULT_BLOCK_SIZE;
 
 }

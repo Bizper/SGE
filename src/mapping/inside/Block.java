@@ -1,24 +1,17 @@
 package mapping.inside;
 
+import constant.BlockEventType;
 import constant.BlockType;
 import util.RandomUtil;
 
 public class Block {
 
-    public String name;
-
     public BlockType prop;
 
-    public String getName() {
-        return name;
-    }
+    private BlockEventType blockEventType = BlockEventType.NORMAL;
 
     public BlockType getProp() {
         return prop;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setProp(BlockType prop) {
@@ -26,19 +19,27 @@ public class Block {
     }
 
     public Block() {
-        this(RandomUtil.getBoolean() ? "VERICAL" : "PUNPEI", BlockType.NORMAL);
+        this(RandomUtil.getBoolean() ? "RiverWood" : "Blueberry", RandomUtil.getBoolean() ? BlockType.TYPE_ROAD : BlockType.TYPE_GLASS);
     }
 
     public Block(String name, BlockType prop) {
-        this.name = name;
         this.prop = prop;
+    }
+
+    public BlockEventType getBlockEventType() {
+        return blockEventType;
+    }
+
+    public Block setBlockEventType(BlockEventType blockEventType) {
+        this.blockEventType = blockEventType;
+        return this;
     }
 
     @Override
     public String toString() {
         return "Block [" +
-                "name='" + name + '\'' +
-                ", prop=" + prop +
+                "prop=" + prop +
+                ", blockEventType=" + blockEventType +
                 ']';
     }
 }

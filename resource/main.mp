@@ -1,3 +1,3 @@
-.name END LAND
-.settings home
-.background ./resource/image/background.jpg
+.name DEAD ISLAND
+.setting home
+.background background
