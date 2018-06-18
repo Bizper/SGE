@@ -47,7 +47,7 @@ public class AssetManager {
     }
 
     private static String replaceSuffix(String str) {
-        return str.split(".")[0];
+        return str.split("\\.")[0];
     }
 
     public static Image getImage(String imageName) {
