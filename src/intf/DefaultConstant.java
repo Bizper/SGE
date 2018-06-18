@@ -1,4 +1,6 @@
-package constant;
+package intf;
+
+import constant.StatusType;
 
 public interface DefaultConstant {
 

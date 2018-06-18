@@ -1,8 +1,12 @@
 package mapping;
 
-import constant.DefaultConstant;
+import intf.DefaultConstant;
 import mapping.inside.Block;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -11,6 +15,8 @@ import java.util.Arrays;
 public class MP implements DefaultConstant {
 
     private String name;
+
+    private Image background;
 
     private Block list[][] = new Block[MAX_MAP_SIZE][MAX_MAP_SIZE];
 
@@ -21,6 +27,19 @@ public class MP implements DefaultConstant {
                 this.list[i][j] = list[i][j];
             }
         }
+    }
+
+    public Image getBackground() {
+        return background;
+    }
+
+    public MP setBackground(String background) {
+        try {
+            this.background = ImageIO.read(new File(background));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return this;
     }
 
     public String getName() {
@@ -39,6 +58,7 @@ public class MP implements DefaultConstant {
     public String toString() {
         return "MP [" +
                 "name='" + name + '\'' +
+                ", background=" + background +
                 ", list=" + (list == null ? null : Arrays.asList(list)) +
                 ']';
     }

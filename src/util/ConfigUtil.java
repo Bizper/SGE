@@ -1,8 +1,6 @@
 package util;
 
-import constant.DefaultConstant;
-import constant.StatusType;
-import intf.Concept;
+import intf.DefaultConstant;
 
 import java.io.*;
 import java.lang.reflect.Field;

@@ -1,5 +1,6 @@
-package controller;
+package controller.dependence;
 
+import controller.Exiter;
 import controller.model.RunModel;
 import controller.scanner.FileScanner;
 import controller.scanner.MapLoader;
@@ -9,7 +10,10 @@ import mapping.SCE;
 import screen.BufferedScreen;
 import screen.Display;
 import service.Proc;
+import util.ConfigUtil;
 import util.Log;
+
+import static intf.Interrupt.*;
 
 /**
  * 整个游戏系统的核心，称为依赖(Dependence)。
@@ -23,22 +27,18 @@ public class Dependence {
 
     private RunModel runModel;
 
-    private Display display;
-
     private int task = 0;//记录核心任务的id
 
     private Dependence() {
         init();
     }
 
-    static Dependence launch() {
-        if(dependence == null) dependence = new Dependence();
-        return dependence;
+    public static void launch() {
+        if (dependence == null) dependence = new Dependence();
     }
 
     private void init() {
         log.log("initiate System core for logic progress.");
-        display = Display.getInstance();
         load();
         task = TaskManager.getInstance().addTask((e) -> {
             runModel.timePlus();
@@ -51,13 +51,13 @@ public class Dependence {
         log.log("start initial world...");
         log.log("construct game world...");
         runModel = RunModel.getInstance();
-        SCE sce = MapLoader.load("./");
-        if(sce == null) {
+        SCE sce = MapLoader.load(ConfigUtil.getValue("default.package"));
+        if (sce == null) {
             log.error("empty SCE file.");
             return;
         }
         runModel.setSentences(sce.getSentences());
-        runModel.setMP(FileScanner.searchForMP("./", sce.getMap("main")));
+        runModel.setMP(FileScanner.searchForMP(ConfigUtil.getValue("default.package"), sce.getMap("main")));
         runModel.setCurrentPlayer(Player.getInstance());
         runModel.setStep(sce.getStart());
 
@@ -65,7 +65,6 @@ public class Dependence {
     }
 
     private void doNext() {
-        runModel.doNext();
         BufferedScreen.write(runModel.getWords());
     }
 
@@ -73,20 +72,17 @@ public class Dependence {
 
     }
 
-    private void clear() {
-        display.clear();
+    public void flush() {
+        Display.STATIC_FLUSH();
     }
 
-    public void flush() {
-        if(display == null) {
-            log.error("Display Panel has't benn initiated.");
-            Exiter.exit();
-        }
-        display.flush();
+    private void clear() {
+        Display.STATIC_CLEAR_SCREEN();
     }
 
     /**
      * to use different interrupt codes, control this system.
+     *
      * @param code interrupt code.
      */
     public static void interrupt(int code) {
@@ -101,45 +97,46 @@ public class Dependence {
      * 0x2a 将字符串写入缓冲区
      * 0x3a 清空消息栏
      * 0x3b 清空当前缓冲区
-     * 0x4a 进行游戏的下一步
+     * 0x4a 接受键盘输入
      * 0x4b 进行当前动作
      * 0x9a 强制退出程序
-     * @param code interrupt code
+     *
+     * @param code   interrupt code
      * @param buffer write into Buffer area
      */
     public static void interrupt(int code, String buffer) {
         log.log("interrupt code: " + code + " with buffer: " + (buffer == null ? "null" : buffer));
-        switch(code) {
-            case 0x1a:
+        switch (code) {
+            case CLOSE_CURRENT_TASK:
                 TaskManager.getInstance().close(dependence.task);
                 break;
-            case 0x1b:
+            case CLOSE_ALL_TASK:
                 TaskManager.getInstance().closeAll();
                 break;
-            case 0x1c:
+            case PRINT_ALL_TASK:
                 TaskManager.getInstance().printAll();
                 break;
-            case 0x1d:
+            case PRINT_ALL_CONCEPT:
                 Proc.printAll();
                 break;
-            case 0x2a:
+            case WRITE_TO_BUFFER:
                 BufferedScreen.write(buffer);
                 break;
-            case 0x3a:
-                dependence.clear();
+            case CLEAR_MESSAGE:
+
                 break;
-            case 0x3b:
+            case CLEAR_BUFFER:
                 BufferedScreen.clear();
                 break;
-            case 0x4a:
+            case DO_NEXT:
                 dependence.doNext();
                 dependence.flush();
                 break;
-            case 0x4b:
+            case DO_ACTION:
                 dependence.doAction();
                 dependence.flush();
                 break;
-            case 0x9a:
+            case FORCE_EXIT:
                 Exiter.exit();
                 break;
         }

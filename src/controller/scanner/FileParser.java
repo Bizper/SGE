@@ -1,9 +1,7 @@
 package controller.scanner;
 
-import constant.DefaultConstant;
-import controller.Exiter;
+import intf.DefaultConstant;
 import impl.action.Spell;
-import intf.GameAction;
 import mapping.*;
 import mapping.inside.Block;
 import service.ConceptFactory;
@@ -11,7 +9,6 @@ import service.Proc;
 import util.Log;
 
 import java.io.*;
-import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -118,7 +115,7 @@ public class FileParser {
 
     /**
      * 设置状态
-     * @return
+     * @return progress
      */
     public static double getProgress() {
         return progress;
@@ -251,6 +248,10 @@ public class FileParser {
                 case "name":
                     mp.setName(value);
                     break;
+                case "background":
+                    mp.setBackground(value);
+                    break;
+
             }
         }
         return mp;

@@ -1,6 +1,6 @@
 package base;
 
-import constant.DefaultConstant;
+import intf.DefaultConstant;
 import constant.EventType;
 import intf.Concept;
 import intf.GameAction;

@@ -1,13 +1,12 @@
 package screen;
 
 
-import controller.Dependence;
+import intf.DefaultConstant;
 import controller.model.RunModel;
 import util.DateUtil;
 import util.Log;
 
 import java.awt.*;
-import java.net.URLEncoder;
 
 public class Display {
 
@@ -32,81 +31,59 @@ public class Display {
         return display;
     }
 
-    private Label location = new Label();
-    private Label location_label = new Label("Location：");
-    private Label game_time = new Label();
-    private Label game_time_label = new Label("GameTime：");
-    private Label desc = new Label();
-    private TextArea script_msg = new TextArea();
-    private TextArea battle_msg = new TextArea();
-
-    private Button next = new Button("NEXT");
-    private Button action = new Button("ACTION");
+    private Graphics g;
 
     private void init() {
         log.log("initiate Display Panel...");
-        location_label.setBounds(14, 14, 70, 30);
-        location.setBounds(84, 14, 100, 30);
-        game_time_label.setBounds(14, 44, 70, 30);
-        game_time.setBounds(84, 44, 60, 30);
-        script_msg.setBounds(14, 79, 777, 296);
-        battle_msg.setBounds(811, 79, 453, 296);
-        next.setBounds(1114, 670, 40, 30);
-        action.setBounds(939, 670, 40, 30);
-        next.addActionListener((e) -> doNext());
-        action.addActionListener((e) -> doAction());
-        panel.add(next);
-        panel.add(action);
-        panel.add(location_label);
-        panel.add(location);
-        panel.add(battle_msg);
-        panel.add(game_time);
-        panel.add(script_msg);
-        panel.add(game_time_label);
+        g = panel.getGraphics();
         log.log("Display Panel initiation complete.");
     }
-
-    public void doNext() {
-        Dependence.interrupt(0x4a);
+    /**
+     * draw images on screen.
+     * @param image which pics you want to draw
+     * @param x location x
+     * @param y location y
+     */
+    private void DRAW_IMAGE(Image image, int x, int y) {
+        g.drawImage(image, x, y, null);
     }
 
-    public void doAction() {
-        Dependence.interrupt(0x4b);
+    public static void STATIC_DRAW_IMAGE(Image image, int x, int y) {
+        display.DRAW_IMAGE(image, x, y);
     }
 
-    void appendScript(String str) {
-        script_msg.append(str + "\n");
+    public static void STATIC_DRAW_IMAGE(Image image) {
+        STATIC_DRAW_IMAGE(image, 0, 0);
+    }
+    //绘制字符串在屏幕上
+    private void DRAW_STRING(String s, int x, int y) {
+        g.drawString(s, x, y);
     }
 
-    void appendBattle(String str) {
-        battle_msg.append(str + "\n");
+    public static void STATIC_DRAW_STRING(String s, int x, int y) {
+        display.DRAW_STRING(s, x, y);
+    }
+    //清屏
+    private void CLEAR_SCREEN() {
+        g.clearRect(0, 0, DefaultConstant.WIN_WIDTH, DefaultConstant.WIN_HEIGHT);
     }
 
-    public void setLocation(String str) {
-        location.setText(str);
+    public static void STATIC_CLEAR_SCREEN() {
+        display.CLEAR_SCREEN();
     }
-
-    public void setTime(String str) {
-        game_time.setText(str);
+    //接受一个runModel实例并将其绘制在屏幕上
+    private static void render(RunModel runModel) {
+        STATIC_CLEAR_SCREEN();
+        STATIC_DRAW_STRING("游戏时间：" + DateUtil.getTime(runModel.getTime()), 15, 20);
+        STATIC_DRAW_IMAGE(runModel.getBackground());
     }
-
-    public void setDesc(String str) {
-        desc.setText(str);
-    }
-
-    public static void render(RunModel runModel) {
-        display.setLocation(runModel.getCurrentMp().getName());
-        display.setTime(DateUtil.getTime(runModel.getTime()));
-        if(BufferedScreen.isChange()) display.appendScript(BufferedScreen.get());
-    }
-
-    public void flush() {
+    //刷新
+    public void FLUSH() {
         render(RunModel.getInstance());
     }
-
-    public void clear() {
-        script_msg.setText("");
-        battle_msg.setText("");
+    public static void STATIC_FLUSH() {
+        display.FLUSH();
     }
+
 
 }

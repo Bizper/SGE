@@ -1,6 +1,6 @@
 package service;
 
-import constant.DefaultConstant;
+import intf.DefaultConstant;
 import intf.Concept;
 import util.Log;
 

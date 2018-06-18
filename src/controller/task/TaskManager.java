@@ -1,6 +1,6 @@
 package controller.task;
 
-import constant.DefaultConstant;
+import intf.DefaultConstant;
 import intf.task.Task;
 import intf.task.Tasker;
 import util.Log;

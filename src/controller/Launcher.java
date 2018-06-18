@@ -1,7 +1,6 @@
 package controller;
 
-import controller.task.TaskManager;
-import javafx.stage.Stage;
+import controller.dependence.Dependence;
 import screen.Win;
 import util.Log;
 

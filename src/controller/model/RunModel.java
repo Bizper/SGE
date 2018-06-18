@@ -6,6 +6,7 @@ import mapping.inside.Block;
 import util.DateUtil;
 import util.Log;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,10 @@ public class RunModel {
 
     public MP getCurrentMp() {
         return currentMp;
+    }
+
+    public Image getBackground() {
+        return currentMp.getBackground();
     }
 
     public RunModel setCurrentMp(MP currentMp) {

@@ -1,6 +1,6 @@
 package base;
 
-import constant.DefaultConstant;
+import intf.DefaultConstant;
 import constant.EventType;
 import constant.StatusType;
 import impl.action.Spell;

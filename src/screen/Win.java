@@ -1,7 +1,7 @@
 package screen;
 
 
-import constant.DefaultConstant;
+import intf.DefaultConstant;
 import controller.Exiter;
 import util.Log;
 
@@ -15,7 +15,11 @@ public class Win extends Frame implements DefaultConstant {
 
     private static Win win;
 
-    public void init() {
+    private Image iBuffer;
+
+    private Graphics gBuffer;
+
+    private void init() {
         log.log("initiate windows...");
         setBounds(200, 200, WIN_WIDTH, WIN_HEIGHT);
         setTitle("MUD GAME");
@@ -34,6 +38,17 @@ public class Win extends Frame implements DefaultConstant {
         add(panel);
         Display.getInstance(panel);
         log.log("windows initiation complete.");
+    }
+
+    public void update(Graphics scr) {
+        if(iBuffer==null) {
+            iBuffer=createImage(this.getSize().width, this.getSize().height);
+            gBuffer=iBuffer.getGraphics();
+        }
+        gBuffer.setColor(getBackground());
+        gBuffer.fillRect(0, 0, this.getSize().width, this.getSize().height);
+        paint(gBuffer);
+        scr.drawImage(iBuffer, 0, 0,this);
     }
 
     public static void launch() {
