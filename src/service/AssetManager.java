@@ -47,9 +47,7 @@ public class AssetManager {
     }
 
     private static String replaceSuffix(String str) {
-        if(str.endsWith(".jpg")) return str.replace(".jpg", "");
-        if(str.endsWith(".png")) return str.replace(".png", "");
-        else return str;
+        return str.split(".")[0];
     }
 
     public static Image getImage(String imageName) {
