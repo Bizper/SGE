@@ -44,6 +44,10 @@ public class Display {
      * @param x location x
      * @param y location y
      */
+    private void DRAW_IMAGE(Image image, int x, int y, int width, int height) {
+        g.drawImage(image, x, y, width, height, null);
+    }
+
     private void DRAW_IMAGE(Image image, int x, int y) {
         g.drawImage(image, x, y, null);
     }
@@ -52,8 +56,19 @@ public class Display {
         display.DRAW_IMAGE(image, x, y);
     }
 
-    public static void STATIC_DRAW_IMAGE(Image image) {
-        STATIC_DRAW_IMAGE(image, 0, 0);
+    public static void STATIC_DRAW_IMAGE(Image image, int x, int y, int width, int height) {
+        display.DRAW_IMAGE(image, x, y, width, height);
+    }
+
+    public static void STATIC_DRAW_BACKGROUND(Image image) {
+        display.DRAW_IMAGE(image, 0, 0, DefaultConstant.WIN_WIDTH, DefaultConstant.WIN_HEIGHT);
+    }
+    //设置画笔颜色
+    private void GRAPHICS_COLOR(Color c) {
+        g.setColor(c);
+    }
+    public static void STATIC_GRAPHICS_COLOR(Color c) {
+        display.GRAPHICS_COLOR(c);
     }
     //绘制字符串在屏幕上
     private void DRAW_STRING(String s, int x, int y) {
@@ -74,8 +89,9 @@ public class Display {
     //接受一个runModel实例并将其绘制在屏幕上
     private static void render(RunModel runModel) {
         STATIC_CLEAR_SCREEN();
+        STATIC_DRAW_BACKGROUND(runModel.getBackground());
+        STATIC_GRAPHICS_COLOR(Color.WHITE);
         STATIC_DRAW_STRING("游戏时间：" + DateUtil.getTime(runModel.getTime()), 15, 20);
-        STATIC_DRAW_IMAGE(runModel.getBackground());
     }
     //刷新
     public void FLUSH() {

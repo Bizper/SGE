@@ -4,7 +4,7 @@ import controller.Exiter;
 import controller.model.RunModel;
 import controller.scanner.FileScanner;
 import controller.scanner.MapLoader;
-import controller.task.TaskManager;
+import service.TaskManager;
 import impl.Player;
 import mapping.SCE;
 import screen.BufferedScreen;
@@ -39,7 +39,7 @@ public class Dependence {
 
     private void init() {
         log.log("initiate System core for logic progress.");
-        load();
+        this.load();
         task = TaskManager.getInstance().addTask((e) -> {
             runModel.timePlus();
             flush();
@@ -101,7 +101,7 @@ public class Dependence {
      * 0x4b 进行当前动作
      * 0x9a 强制退出程序
      *
-     * @param code   interrupt code
+     * @param code interrupt code
      * @param buffer write into Buffer area
      */
     public static void interrupt(int code, String buffer) {

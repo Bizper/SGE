@@ -1,3 +1,3 @@
 .name END LAND
 .settings home
-.background ./resource/image/630.jpg
+.background ./resource/image/background.jpg

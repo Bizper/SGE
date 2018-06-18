@@ -1,6 +1,6 @@
 package controller;
 
-import controller.task.TaskManager;
+import service.TaskManager;
 import util.ConfigUtil;
 import util.Log;
 
