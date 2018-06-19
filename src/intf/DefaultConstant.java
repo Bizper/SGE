@@ -48,9 +48,9 @@ public interface DefaultConstant {
      * WINDOWS PROPERTIES
      */
 
-    int WIN_WIDTH = 1290;
+    int WIN_WIDTH = 1280;
 
-    int WIN_HEIGHT = 768;
+    int WIN_HEIGHT = 760;
 
     String DEFAULT_TITLE = "MUD GAME";
 

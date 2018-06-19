@@ -1,5 +1,6 @@
 package base;
 
+import constant.StatusType;
 import intf.DefaultConstant;
 import constant.EventType;
 import intf.Concept;
@@ -10,6 +11,8 @@ import intf.action.SelfOperation;
 import intf.action.TargetOperation;
 import service.ConceptFactory;
 
+import java.awt.*;
+
 public abstract class Action implements Concept, GameAction, DefaultConstant {
 
     protected TargetOperation<GameUnit> target_action;
@@ -19,6 +22,8 @@ public abstract class Action implements Concept, GameAction, DefaultConstant {
     protected SelfOperation<GameUnit> self_action;
 
     protected String name = DEFAULT_NAME;
+
+    protected StatusType default_type = DEFAULT_STATUS;
 
     protected int ID = DEFAULT_ID;
 
@@ -50,6 +55,20 @@ public abstract class Action implements Concept, GameAction, DefaultConstant {
     public boolean getUsed() {
         return isUsed;
     }
+
+    @Override
+    public StatusType getStatus() {
+        return default_type;
+    }
+
+    @Override
+    public Concept setStatus(StatusType type) {
+        default_type = type;
+        return this;
+    }
+
+    @Override
+    public abstract void paint(Graphics g);
 
     @Override
     public Concept create() {

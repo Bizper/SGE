@@ -8,6 +8,7 @@ import intf.Concept;
 import intf.GameUnit;
 import service.ConceptFactory;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,6 +49,9 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
         onFlush(EventType.TAKE_ATTACK_CHANGE);
         return this;
     }
+
+    @Override
+    public abstract void paint(Graphics g);
 
     @Override
     public int getDefence() {
@@ -270,7 +274,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
     }
 
     @Override
-    public GameUnit setStatus(StatusType type) {
+    public Concept setStatus(StatusType type) {
         this.default_type = type;
         onFlush(EventType.TAKE_STATUS_CHANGE);
         return this;

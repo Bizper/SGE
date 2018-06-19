@@ -1,12 +1,15 @@
 package screen;
 
 
+import constant.StatusType;
 import controller.dependence.Dependence;
 import controller.model.RunModel;
+import intf.Concept;
 import intf.DefaultConstant;
 import controller.Exiter;
 import intf.Interrupt;
 import service.AssetManager;
+import service.Proc;
 import util.DateUtil;
 import util.Log;
 
@@ -54,18 +57,23 @@ public class Win extends Frame implements DefaultConstant {
                 g.drawImage(AssetManager.getImage(runModel.getBlock(i, j).getProp()), i * DEFAULT_BLOCK_SIZE, j * DEFAULT_BLOCK_SIZE, DEFAULT_BLOCK_SIZE, DEFAULT_BLOCK_SIZE, null);
             }
         }
+        Proc.conceptFilterSet(this::drawableCheck).forEach((e) -> e.paint(g));
         g.drawString("游戏时间：" + DateUtil.getTime(runModel.getTime()), 15, 20);
     }
 
+    private boolean drawableCheck(Concept concept) {
+        return concept.getStatus() != StatusType.STATUS_NON_DRAWABLE || concept.getStatus() != StatusType.STATUS_NON_SHOW;
+    }
+
     public void update(Graphics scr) {
-        if(iBuffer==null) {
+        if(iBuffer == null) {
             iBuffer=createImage(this.getSize().width, this.getSize().height);
             gBuffer=iBuffer.getGraphics();
         }
         gBuffer.setColor(getBackground());
         gBuffer.fillRect(0, 0, this.getSize().width, this.getSize().height);
         paint(gBuffer);
-        scr.drawImage(iBuffer, 0, 0,this);
+        scr.drawImage(iBuffer, 0, 0, this);
     }
 
     private void render(RunModel runModel) {

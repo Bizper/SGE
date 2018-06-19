@@ -2,9 +2,15 @@ package impl.person;
 
 import base.Instance;
 
+import java.awt.*;
 import java.util.Arrays;
 
 public class Character extends Instance {
+
+    @Override
+    public void paint(Graphics g) {
+
+    }
 
     @Override
     public String toString() {

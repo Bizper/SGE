@@ -1,5 +1,6 @@
 package controller;
 
+import service.Proc;
 import service.TaskManager;
 import util.ConfigUtil;
 import util.Log;
@@ -12,6 +13,7 @@ public class Exiter {
         log.log("releasing resource...");
         ConfigUtil.saveConstant();
         TaskManager.getInstance().closeAll();
+        Proc.logoutAll();
         exit();
     }
 

@@ -4,10 +4,9 @@ import intf.DefaultConstant;
 import intf.Concept;
 import util.Log;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Proc implements DefaultConstant {
 
@@ -25,6 +24,14 @@ public class Proc implements DefaultConstant {
         return list.get(id);
     }
 
+    public synchronized static Set<Integer> idSet() {
+        return list.keySet();
+    }
+
+    public synchronized static Set<Concept> conceptFilterSet(Function<Concept, Boolean> func) {
+        return list.values().stream().filter(func::apply).collect(Collectors.toSet());
+    }
+
     synchronized static int register(Concept concept) {
         int localID = ID;
         if(empty.size() > 0) {
@@ -38,6 +45,15 @@ public class Proc implements DefaultConstant {
         concept.setID(localID);
         IDPlus();
         return localID;
+    }
+
+    public synchronized static void logoutAll() {
+        log.log("releasing all registered instances...");
+        List<Concept> rest = new ArrayList<>(list.values());
+        for(Concept concept : rest) {
+            concept.destroy();
+        }
+        if(list.size() != 0) list.clear();
     }
 
     private synchronized static void IDPlus() {
@@ -58,7 +74,7 @@ public class Proc implements DefaultConstant {
         mapping.put(id, ID);
     }
 
-    public synchronized static int get(String id) {
+    public synchronized static int getMappingId(String id) {
         return mapping.get(id);
     }
 

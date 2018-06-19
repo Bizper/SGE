@@ -1,0 +1,6 @@
+spell_holy_fire {
+SpellName=HolyFire
+SpellType=TARGET HURT
+SpellManaCost=30
+SpellNumber=60
+}

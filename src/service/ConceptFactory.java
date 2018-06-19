@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ConceptFactory {
 
-    private static Class<?> DEFAULT_CLASS;
+    private static Class<? extends Concept> DEFAULT_CLASS;
 
     private static Log log = Log.getInstance(ConceptFactory.class);
 
@@ -33,13 +33,13 @@ public class ConceptFactory {
         return null;
     }
 
-    public synchronized static <T> int getInstanceID(Class<T> cls) {
+    public synchronized static <T extends Concept> int getInstanceID(Class<T> cls) {
         log.log("receive model: " + cls);
         DEFAULT_CLASS = cls;
         return getNewInstance().getID();
     }
 
-    public synchronized static <T> T getInstance(Class<T> cls) {
+    public synchronized static <T extends Concept> T getInstance(Class<T> cls) {
         DEFAULT_CLASS = cls;
         return (T) getNewInstance();
     }

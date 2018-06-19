@@ -1,6 +1,9 @@
 package intf;
 
 import constant.EventType;
+import constant.StatusType;
+
+import java.awt.*;
 
 public interface Concept {
 
@@ -16,6 +19,12 @@ public interface Concept {
      * @return true为被使用，false为未使用
      */
     boolean getUsed();
+
+    StatusType getStatus();
+
+    Concept setStatus(StatusType type);
+
+    void paint(Graphics g);
 
     /**
      * 被创建时调用的方法
