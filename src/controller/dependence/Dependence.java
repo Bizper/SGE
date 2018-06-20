@@ -4,7 +4,7 @@ import controller.Exiter;
 import controller.model.RunModel;
 import controller.scanner.FileScanner;
 import controller.scanner.MapLoader;
-import intf.DefaultConstant;
+import intf.constant.DefaultConstant;
 import screen.Win;
 import service.AssetManager;
 import service.TaskManager;
@@ -15,7 +15,7 @@ import service.Proc;
 import util.ConfigUtil;
 import util.Log;
 
-import static intf.Interrupt.*;
+import static intf.constant.Interrupt.*;
 
 /**
  * 整个游戏系统的核心，称为依赖(Dependence)。

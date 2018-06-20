@@ -1,4 +1,4 @@
-package intf;
+package intf.constant;
 
 public interface Interrupt {
 

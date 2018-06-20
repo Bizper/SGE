@@ -1,12 +1,9 @@
 package mapping;
 
-import intf.DefaultConstant;
+import intf.constant.DefaultConstant;
 import mapping.inside.Block;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 
 /**

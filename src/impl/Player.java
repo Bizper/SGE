@@ -1,7 +1,7 @@
 package impl;
 
 import base.Instance;
-import constant.StatusType;
+import types.StatusType;
 import service.ConceptFactory;
 
 import java.awt.*;

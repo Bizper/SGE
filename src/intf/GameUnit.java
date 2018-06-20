@@ -1,7 +1,7 @@
 package intf;
 
-import constant.EventType;
-import constant.StatusType;
+import types.EventType;
+import types.StatusType;
 import impl.action.Spell;
 
 public interface GameUnit {

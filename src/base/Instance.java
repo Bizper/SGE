@@ -1,8 +1,7 @@
 package base;
 
-import intf.DefaultConstant;
-import constant.EventType;
-import constant.StatusType;
+import intf.constant.DefaultConstant;
+import types.*;
 import impl.action.Spell;
 import intf.Concept;
 import intf.GameUnit;

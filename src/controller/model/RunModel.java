@@ -1,6 +1,6 @@
 package controller.model;
 
-import constant.BlockType;
+import types.BlockType;
 import impl.Player;
 import mapping.MP;
 import mapping.inside.Block;

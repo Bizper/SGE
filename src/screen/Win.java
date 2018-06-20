@@ -1,13 +1,13 @@
 package screen;
 
 
-import constant.StatusType;
+import types.StatusType;
 import controller.dependence.Dependence;
 import controller.model.RunModel;
 import intf.Concept;
-import intf.DefaultConstant;
+import intf.constant.DefaultConstant;
 import controller.Exiter;
-import intf.Interrupt;
+import intf.constant.Interrupt;
 import service.AssetManager;
 import service.Proc;
 import util.DateUtil;

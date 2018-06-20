@@ -13,8 +13,8 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import static intf.DefaultConstant.MAX_MAP_SIZE_HEIGHT;
-import static intf.DefaultConstant.MAX_MAP_SIZE_WIDTH;
+import static intf.constant.DefaultConstant.MAX_MAP_SIZE_HEIGHT;
+import static intf.constant.DefaultConstant.MAX_MAP_SIZE_WIDTH;
 
 
 public class FileParser {

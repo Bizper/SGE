@@ -1,6 +1,6 @@
 package service;
 
-import constant.BlockType;
+import types.BlockType;
 import util.Log;
 
 import javax.imageio.ImageIO;
@@ -8,7 +8,7 @@ import java.awt.*;
 import java.io.File;
 import java.util.HashMap;
 
-import static intf.DefaultConstant.PATH;
+import static intf.constant.DefaultConstant.PATH;
 
 public class AssetManager {
 

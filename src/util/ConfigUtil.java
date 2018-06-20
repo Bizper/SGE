@@ -1,6 +1,6 @@
 package util;
 
-import intf.DefaultConstant;
+import intf.constant.DefaultConstant;
 
 import java.io.*;
 import java.lang.reflect.Field;

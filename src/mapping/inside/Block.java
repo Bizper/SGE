@@ -1,7 +1,7 @@
 package mapping.inside;
 
-import constant.BlockEventType;
-import constant.BlockType;
+import types.BlockEventType;
+import types.BlockType;
 import util.RandomUtil;
 
 public class Block {
