@@ -60,7 +60,7 @@ public interface DefaultConstant {
 
     int FRAME_PER_SECOND = 1000/60;
 
-    String PATH = "./src/asset/images/";
+    String ASSET_PATH = "./src/asset/";
 
     int DEFAULT_BLOCK_SIZE = 20;
 

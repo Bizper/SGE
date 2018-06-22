@@ -8,7 +8,7 @@ import java.awt.*;
 import java.io.File;
 import java.util.HashMap;
 
-import static intf.constant.DefaultConstant.PATH;
+import static intf.constant.DefaultConstant.ASSET_PATH;
 
 public class AssetManager {
 
@@ -18,7 +18,7 @@ public class AssetManager {
 
     public static void init() {
         log.log("loading resources...");
-        load(PATH);
+        load(ASSET_PATH);
         blocks.put(BlockType.TYPE_ROAD, "1");
         blocks.put(BlockType.TYPE_GLASS, "2");
         log.log("loading resources complete.");
