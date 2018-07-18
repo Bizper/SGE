@@ -1,12 +1,14 @@
 package mapping.inside;
 
+import service.AssetManager;
 import types.BlockEventType;
 import types.BlockType;
-import util.RandomUtil;
 
 public class Block {
 
-    public BlockType prop;
+    private BlockType prop;
+
+    private String imageName;
 
     private BlockEventType blockEventType = BlockEventType.NORMAL;
 
@@ -19,15 +21,17 @@ public class Block {
     }
 
     public Block() {
-        this(RandomUtil.getBoolean() ? "RiverWood" : "Blueberry", RandomUtil.getBoolean() ? BlockType.TYPE_ROAD : BlockType.TYPE_GLASS);
-    }
-
-    public Block(String name, BlockType prop) {
-        this.prop = prop;
+        BlockType type = BlockType.TYPE_ROAD;
+        this.prop = type;
+        this.imageName = AssetManager.getImageName(type);
     }
 
     public BlockEventType getBlockEventType() {
         return blockEventType;
+    }
+
+    public String getImageName() {
+        return imageName;
     }
 
     public Block setBlockEventType(BlockEventType blockEventType) {

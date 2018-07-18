@@ -104,13 +104,12 @@ public class TaskManager {
     */
 
     public void printAll() {
-        StringBuilder stringBuilder = new StringBuilder("\nTaskList: ");
-        stringBuilder.append("\n").append("ID").append(" ").append("NAME").append(" ").append("STATUS").append("\n");
+        log.log("");
+        System.out.println("TASK LIST:");
+        log.format("%-5s%-20s%-10s\n", "ID", "NAME", "STATUS");
         for(Tasker timer : list) {
-            stringBuilder.append(timer).append("\n");
+            log.format("%-5d%-20s%-10s\n", timer.getID(), timer.getTaskName(), (timer.isRunning() ? "RUNNING" : "STOP"));
         }
-        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-        log.log(stringBuilder.toString());
     }
 
     private class Timer<T> extends Thread implements Tasker {
@@ -122,6 +121,11 @@ public class TaskManager {
         private boolean flag = true;
         private int runtime = DefaultConstant.FRAME_PER_SECOND;
         private boolean running = true;
+
+        @Override
+        public String getTaskName() {
+            return name;
+        }
 
         public boolean isRunning() {
             return running;
@@ -199,6 +203,11 @@ public class TaskManager {
         private int runtime = DefaultConstant.FRAME_PER_SECOND;
         private boolean running = true;
 
+        @Override
+        public String getTaskName() {
+            return name;
+        }
+
         public boolean isRunning() {
             return running;
         }
@@ -250,7 +259,7 @@ public class TaskManager {
 
         public void run() {
             try {
-                Thread.sleep(runtime);
+                if(runtime != 0) Thread.sleep(runtime);
                 task.action(t);
                 close();
             } catch (InterruptedException e) {

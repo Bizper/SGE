@@ -5,8 +5,10 @@ import controller.model.RunModel;
 import controller.scanner.FileScanner;
 import controller.scanner.MapLoader;
 import intf.constant.DefaultConstant;
+import intf.constant.Interrupt;
 import screen.Win;
 import service.AssetManager;
+import service.AudioManager;
 import service.TaskManager;
 import impl.Player;
 import mapping.SCE;
@@ -14,6 +16,8 @@ import screen.BufferedScreen;
 import service.Proc;
 import util.ConfigUtil;
 import util.Log;
+
+import java.awt.event.KeyEvent;
 
 import static intf.constant.Interrupt.*;
 
@@ -41,30 +45,33 @@ public class Dependence {
 
     private void init() {
         log.log("initiate System core for logic progress.");
-        AssetManager.init();
-        this.load();
-        task = TaskManager.getInstance().addTask((e) -> {
-            flush();
-        }, DefaultConstant.FRAME_PER_SECOND, "FLUSH");
-        TaskManager.getInstance().addTask((e) -> {
-            runModel.timePlus();
-        }, 1000, "TIME");
+        try {
+            AssetManager.init();//调用资源管理器的初始化方法
+            this.load();
+            AudioManager.load("bgm", true);
+            task = TaskManager.getInstance().addTask((e) -> runModel.timePlus(), 1000, "TIME");
+            interrupt(Interrupt.PRINT_ALL_TASK);
+            interrupt(Interrupt.PRINT_ALL_CONCEPT);
+        } catch(Exception e) {
+            log.error(e);
+        }
         log.log("System core initiation complete.");
     }
 
     private void load() {
-        log.log("start initial world...");
         log.log("construct game world...");
+        String PATH = ConfigUtil.getValue("default.package");
         runModel = RunModel.getInstance();
-        SCE sce = MapLoader.load(ConfigUtil.getValue("default.package"));
+        SCE sce = MapLoader.load(PATH);
         if (sce == null) {
             log.error("empty SCE file.");
             return;
         }
         runModel.setSentences(sce.getSentences());
-        runModel.setMP(FileScanner.searchForMP(ConfigUtil.getValue("default.package"), sce.getMap("main")));
+        runModel.setMP(FileScanner.searchForMP(PATH, sce.getMap("main")));
         runModel.setCurrentPlayer(Player.getInstance());
         runModel.setStep(sce.getStart());
+        Win.setRunModel();
         log.log("initial game world with \"" + sce.getName() + "\" settings...");
     }
 
@@ -72,8 +79,18 @@ public class Dependence {
         BufferedScreen.write(runModel.getWords());
     }
 
-    private void doAction() {
-
+    private void doAction(String buffer) {
+        int keyCode;
+        try {
+            keyCode = Integer.parseInt(buffer);
+        } catch(NumberFormatException nfe) {
+            log.warning("input code not currently.");
+            keyCode = 0;
+        }
+        switch(keyCode) {
+            case KeyEvent.VK_UP:
+                break;
+        }
     }
 
     public void flush() {
@@ -132,7 +149,7 @@ public class Dependence {
                 dependence.flush();
                 break;
             case DO_ACTION:
-                dependence.doAction();
+                dependence.doAction(buffer);
                 dependence.flush();
                 break;
             case FORCE_EXIT:

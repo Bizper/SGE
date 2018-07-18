@@ -79,6 +79,10 @@ public class Log {
         print(2, mode, obj);
     }
 
+    public void format(String format, Object... obj) {
+        fmtPrint(format, obj);
+    }
+
     private void print(int level, int mode, Object obj) {
         String output = "[" + list.get(level) + "][" + DateUtil.getHour() + "][" + classes.getName() + "] " + obj;
         switch(mode) {
@@ -119,6 +123,10 @@ public class Log {
 
     private void norPrint(String out) {
         System.out.println(out);
+    }
+
+    private void fmtPrint(String format, Object... args) {
+        System.out.printf(format, args);
     }
 
 }

@@ -4,3 +4,7 @@ SpellType=TARGET HURT
 SpellManaCost=30
 SpellNumber=60
 }
+unit_main_character {
+UnitName=Allen
+UnitHp=500
+}

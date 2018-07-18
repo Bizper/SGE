@@ -70,7 +70,7 @@ public class Proc implements DefaultConstant {
         System.gc();
     }
 
-    public synchronized static void add(String id, int ID) {
+    public synchronized static void addMappingId(String id, int ID) {
         mapping.put(id, ID);
     }
 
@@ -83,13 +83,17 @@ public class Proc implements DefaultConstant {
             log.log("no concept registered.");
             return;
         }
-        log.log("REGISTERED CONCEPT LIST");
+        log.log("");
+        log.format("REGISTERED CONCEPT LIST:");
+        log.format("%-5s%-20s%-10s\n", "ID", "NAME", "TYPE");
         for(Map.Entry<Integer, Concept> e : list.entrySet()) {
-            log.log(e.getValue());
+            Concept concept = e.getValue();
+            log.format("%-5d%-20s%-10s\n", concept.getID(), concept.getName(), concept.getClass().getName());
         }
-        log.log("ID MAPPING LIST");
+        System.out.println("\nID MAPPING LIST:");
+        log.format("%-30s%-10s\n", "NAME", "ID");
         for(Map.Entry<String, Integer> e : mapping.entrySet()) {
-            log.log("\"" + e.getKey() + "\" " + e.getValue());
+            log.format("%-30s%-10s\n", "\"" + e.getKey() + "\" ", e.getValue());
         }
     }
 

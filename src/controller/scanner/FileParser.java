@@ -129,7 +129,7 @@ public class FileParser {
         if(p > MAX_PROGRESS) p = MAX_PROGRESS;
         DecimalFormat df = new DecimalFormat("#");
         p = Double.parseDouble(df.format(p * 100));
-        log.log("parsing \"" + message + "\" progress: " + p + "%");
+        //log.log("parsing \"" + message + "\" progress: " + p + "%");
         progress = p;
     }
 
@@ -207,7 +207,7 @@ public class FileParser {
                             e.setHp(e.getHp() + Integer.parseInt(result.get("SpellNumber")));
                         });
                     }
-                    Proc.add(id, spell.getID());
+                    Proc.addMappingId(id, spell.getID());
                 }
             }
         }

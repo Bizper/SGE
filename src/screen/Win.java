@@ -1,6 +1,7 @@
 package screen;
 
 
+import service.TaskManager;
 import types.StatusType;
 import controller.dependence.Dependence;
 import controller.model.RunModel;
@@ -46,19 +47,21 @@ public class Win extends Frame implements DefaultConstant {
         setVisible(true);
         addKeyListener(new KeySolution());
         setLayout(null);
+        TaskManager.getInstance().addTask((e) -> render(), DefaultConstant.FRAME_PER_SECOND, "FLUSH");
         log.log("windows initiation complete.");
     }
 
     public void paint(Graphics g) {
         g.setColor(Color.WHITE);
         if(runModel == null) return;
-        for(int i=0; i<MAX_MAP_SIZE_WIDTH; i++) {
-            for(int j=0; j<MAX_MAP_SIZE_HEIGHT; j++) {
-                g.drawImage(AssetManager.getImage(runModel.getBlock(i, j).getProp()), i * DEFAULT_BLOCK_SIZE, j * DEFAULT_BLOCK_SIZE, DEFAULT_BLOCK_SIZE, DEFAULT_BLOCK_SIZE, null);
+        for(int i=1; i<MAX_MAP_SIZE_WIDTH; i++) {
+            for(int j=2; j<MAX_MAP_SIZE_HEIGHT; j++) {
+                Image image = AssetManager.getImage(runModel.getBlock(i, j).getImageName());
+                if(image == null) continue;
+                g.drawImage(image, i * DEFAULT_BLOCK_SIZE, j * DEFAULT_BLOCK_SIZE, DEFAULT_BLOCK_SIZE, DEFAULT_BLOCK_SIZE, null);
             }
         }
         Proc.conceptFilterSet(this::drawableCheck).forEach((e) -> e.paint(g));
-        g.drawString("游戏时间：" + DateUtil.getTime(runModel.getTime()), 15, 20);
     }
 
     private boolean drawableCheck(Concept concept) {
@@ -76,9 +79,16 @@ public class Win extends Frame implements DefaultConstant {
         scr.drawImage(iBuffer, 0, 0, this);
     }
 
-    private void render(RunModel runModel) {
-        this.runModel = runModel;
+    private void render() {
         repaint();
+    }
+
+    public static void flush() {
+        win.render();
+    }
+
+    public static void setRunModel() {
+        win.runModel = RunModel.getInstance();
     }
 
     public static Win launch() {
@@ -90,10 +100,6 @@ public class Win extends Frame implements DefaultConstant {
             log.warning("not first of the call to this method, please do attention to this windows instance.");
         }
         return win;
-    }
-
-    public static void flush() {
-        win.render(RunModel.getInstance());
     }
 
     private class KeySolution extends KeyAdapter {

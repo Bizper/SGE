@@ -22,7 +22,7 @@ public class ConceptFactory {
      * 获取默认的model
      * @return
      */
-    private synchronized static Object getModel() {
+    private static Object getModel() {
         try {
             Constructor cons =  DEFAULT_CLASS.getConstructor();
             cons.setAccessible(true);
@@ -33,18 +33,18 @@ public class ConceptFactory {
         return null;
     }
 
-    public synchronized static <T extends Concept> int getInstanceID(Class<T> cls) {
+    public static <T extends Concept> int getInstanceID(Class<T> cls) {
         log.log("receive model: " + cls);
         DEFAULT_CLASS = cls;
         return getNewInstance().getID();
     }
 
-    public synchronized static <T extends Concept> T getInstance(Class<T> cls) {
+    public static <T extends Concept> T getInstance(Class<T> cls) {
         DEFAULT_CLASS = cls;
         return (T) getNewInstance();
     }
 
-    private synchronized static Concept getNewInstance() {
+    private static Concept getNewInstance() {
         Concept concept = (Concept) getModel();
         if(concept == null) {
             return null;
@@ -55,11 +55,11 @@ public class ConceptFactory {
         return concept;
     }
 
-    public synchronized static void receive(Concept concept) {
+    public static void receive(Concept concept) {
         Proc.logout(concept);
     }
 
-    private synchronized static Class getDefaultModel() {
+    private static Class getDefaultModel() {
         String classUrl = ConfigUtil.getValue("default.model");
         Class<?> cls = null;//default model
         try {
