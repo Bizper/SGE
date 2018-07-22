@@ -2,13 +2,14 @@ package service;
 
 import intf.constant.DefaultConstant;
 import intf.Concept;
+import resources.Strings;
 import util.Log;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class Proc implements DefaultConstant {
+public class Proc implements DefaultConstant, Strings {
 
     private static Log log = Log.getInstance(Proc.class);
 
@@ -48,7 +49,7 @@ public class Proc implements DefaultConstant {
     }
 
     public synchronized static void logoutAll() {
-        log.log("releasing all registered instances...");
+        log.log(releasing_all_registered_instances);
         List<Concept> rest = new ArrayList<>(list.values());
         for(Concept concept : rest) {
             concept.destroy();
@@ -80,20 +81,20 @@ public class Proc implements DefaultConstant {
 
     public static void printAll() {
         if(list.isEmpty()) {
-            log.log("no concept registered.");
+            log.log(proc_print_error);
             return;
         }
         log.log("");
-        log.format("REGISTERED CONCEPT LIST:");
-        log.format("%-5s%-20s%-10s\n", "ID", "NAME", "TYPE");
+        log.format("注册实例表:");
+        log.format("%-5s%-20s%-10s", "ID", "NAME", "TYPE");
         for(Map.Entry<Integer, Concept> e : list.entrySet()) {
             Concept concept = e.getValue();
-            log.format("%-5d%-20s%-10s\n", concept.getID(), concept.getName(), concept.getClass().getName());
+            log.format("%-5d%-20s%-10s", concept.getID(), concept.getName(), concept.getClass().getName());
         }
-        System.out.println("\nID MAPPING LIST:");
-        log.format("%-30s%-10s\n", "NAME", "ID");
+        System.out.println("\nID映射表:");
+        log.format("%-30s%-10s", "NAME", "ID");
         for(Map.Entry<String, Integer> e : mapping.entrySet()) {
-            log.format("%-30s%-10s\n", "\"" + e.getKey() + "\" ", e.getValue());
+            log.format("%-30s%-10s", e.getKey(), e.getValue());
         }
     }
 

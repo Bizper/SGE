@@ -12,7 +12,7 @@ public class MapLoader {
     private static Log log = Log.getInstance(MapLoader.class);
 
     public static SCE load(String path) {
-        log.log("load SCE file from " + path);
+        log.log("开始从指定位置读取SCE文件: " + path);
         return FileScanner.searchForSCE(path);
     }
 

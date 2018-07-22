@@ -34,7 +34,7 @@ public class ConceptFactory {
     }
 
     public static <T extends Concept> int getInstanceID(Class<T> cls) {
-        log.log("receive model: " + cls);
+        log.log("接受到摸具为: " + cls);
         DEFAULT_CLASS = cls;
         return getNewInstance().getID();
     }
@@ -50,7 +50,7 @@ public class ConceptFactory {
             return null;
         }
         concept.create();
-        log.log("creating model: " + concept.getClass().getName());
+        log.log("创建实例: " + concept.getClass().getName());
         Proc.register(concept);
         return concept;
     }
@@ -63,7 +63,7 @@ public class ConceptFactory {
         String classUrl = ConfigUtil.getValue("default.model");
         Class<?> cls = null;//default model
         try {
-            log.log("scanning packages for " + classUrl);
+            log.log("正在搜索文件包: " + classUrl);
             cls = ClassLoader.getSystemClassLoader().loadClass(classUrl);
         } catch (ClassNotFoundException e) {
             log.error(e);
@@ -72,7 +72,7 @@ public class ConceptFactory {
     }
 
     public static void print() {
-        log.log("current model=" + DEFAULT_CLASS);
+        log.log("当前模型为: " + DEFAULT_CLASS);
     }
 
 }

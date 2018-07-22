@@ -1,12 +1,13 @@
 package util;
 
 import intf.constant.DefaultConstant;
+import resources.Strings;
 
 import java.io.*;
 import java.lang.reflect.Field;
 import java.util.Properties;
 
-public class ConfigUtil implements DefaultConstant {
+public class ConfigUtil implements DefaultConstant, Strings {
 
     private static Properties prop = new Properties();
 
@@ -20,7 +21,7 @@ public class ConfigUtil implements DefaultConstant {
 
     static {
         try {
-            log.log("loading properties...");
+            log.log(load_properties);
             inputStream = ConfigUtil.class.getResourceAsStream("/config.properties");
             prop.load(inputStream);
         } catch (IOException e) {
@@ -32,7 +33,7 @@ public class ConfigUtil implements DefaultConstant {
      * 将constant内的常量保存到文件
      */
     public static void saveConstant() {
-        log.log("save configs...");
+        log.log(save_configs);
         Field fields[] = DefaultConstant.class.getFields();
         try {
             fw = new FileWriter(new File(outputFilePath));
@@ -40,7 +41,7 @@ public class ConfigUtil implements DefaultConstant {
                 prop.setProperty(field.getName(), field.get(DefaultConstant.class).toString());
             }
             prop.store(fw, "CONFIG FILES");
-            log.log("save complete!");
+            log.log(save_configs_complete);
         } catch(Exception e) {
             log.error(e);
         }

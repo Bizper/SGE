@@ -3,16 +3,17 @@ package service;
 import intf.constant.DefaultConstant;
 import intf.task.Task;
 import intf.task.Tasker;
+import resources.Strings;
 import util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class TaskManager {
+public class TaskManager implements Strings {
 
     private static Log log = Log.getInstance(TaskManager.class);
 
-    private List<Tasker> list = new LinkedList<>();
+    private static List<Tasker> list = new LinkedList<>();
 
     //private ArrayList<Integer> closed = new ArrayList<>();
 
@@ -73,13 +74,13 @@ public class TaskManager {
     }
 
     public void close(int id) {
-        log.log("closing " + id + " task...");
+        log.log("关闭ID为 " + id + " 的任务...");
         list.get(id).close();
         list.remove(id);
     }
 
     public void closeAll() {
-        log.log("closing all tasks...");
+        log.log(task_closing_all);
         for(Tasker timer : list) {
             timer.close();
         }
@@ -103,12 +104,12 @@ public class TaskManager {
     }
     */
 
-    public void printAll() {
+    public static void printAll() {
         log.log("");
-        System.out.println("TASK LIST:");
-        log.format("%-5s%-20s%-10s\n", "ID", "NAME", "STATUS");
+        System.out.println("任务列表:");
+        log.format("%-5s%-20s%-10s", "ID", "NAME", "STATUS");
         for(Tasker timer : list) {
-            log.format("%-5d%-20s%-10s\n", timer.getID(), timer.getTaskName(), (timer.isRunning() ? "RUNNING" : "STOP"));
+            log.format("%-5d%-20s%-10s", timer.getID(), timer.getTaskName(), (timer.isRunning() ? "RUNNING" : "STOP"));
         }
     }
 

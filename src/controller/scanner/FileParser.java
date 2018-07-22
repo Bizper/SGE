@@ -13,6 +13,7 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import static intf.constant.DefaultConstant.DEFAULT_BLOCK_SIZE;
 import static intf.constant.DefaultConstant.MAX_MAP_SIZE_HEIGHT;
 import static intf.constant.DefaultConstant.MAX_MAP_SIZE_WIDTH;
 
@@ -96,9 +97,9 @@ public class FileParser {
             return null;
         }
         String name = "";
-        Block list[][] = new Block[MAX_MAP_SIZE_WIDTH][MAX_MAP_SIZE_HEIGHT];
-        for(int i=0; i<MAX_MAP_SIZE_WIDTH; i++) {
-            for(int j=0; j<MAX_MAP_SIZE_HEIGHT; j++) {
+        Block list[][] = new Block[MAX_MAP_SIZE_WIDTH/DEFAULT_BLOCK_SIZE][MAX_MAP_SIZE_HEIGHT/DEFAULT_BLOCK_SIZE];
+        for(int i=0; i<MAX_MAP_SIZE_WIDTH/DEFAULT_BLOCK_SIZE; i++) {
+            for(int j=0; j<MAX_MAP_SIZE_HEIGHT/DEFAULT_BLOCK_SIZE; j++) {
                 list[i][j] = new Block();
             }
         }

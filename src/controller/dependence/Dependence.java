@@ -4,16 +4,14 @@ import controller.Exiter;
 import controller.model.RunModel;
 import controller.scanner.FileScanner;
 import controller.scanner.MapLoader;
-import intf.constant.DefaultConstant;
 import intf.constant.Interrupt;
+import resources.Strings;
 import screen.Win;
-import service.AssetManager;
-import service.AudioManager;
-import service.TaskManager;
+import service.*;
 import impl.Player;
+import impl.person.Character;
 import mapping.SCE;
 import screen.BufferedScreen;
-import service.Proc;
 import util.ConfigUtil;
 import util.Log;
 
@@ -25,7 +23,7 @@ import static intf.constant.Interrupt.*;
  * 整个游戏系统的核心，称为依赖(Dependence)。
  * 通过使用中断(interrupt)方法来控制整个程序的运行。
  */
-public class Dependence {
+public class Dependence implements Strings {
 
     private static Log log = Log.getInstance(Dependence.class);
 
@@ -44,56 +42,67 @@ public class Dependence {
     }
 
     private void init() {
-        log.log("initiate System core for logic progress.");
+        log.log(initiate_system_core);
         try {
             AssetManager.init();//调用资源管理器的初始化方法
             this.load();
             AudioManager.load("bgm", true);
-            task = TaskManager.getInstance().addTask((e) -> runModel.timePlus(), 1000, "TIME");
-            interrupt(Interrupt.PRINT_ALL_TASK);
-            interrupt(Interrupt.PRINT_ALL_CONCEPT);
+            TaskManager.getInstance().addTask((e) -> {
+                runModel.timePlus();
+            }, 1000, "TIME");//计数器方法
+            Proc.printAll();
         } catch(Exception e) {
             log.error(e);
         }
-        log.log("System core initiation complete.");
+        log.log(initiate_system_core_complete);
     }
 
     private void load() {
-        log.log("construct game world...");
+        log.log(construct_game_world);
         String PATH = ConfigUtil.getValue("default.package");
         runModel = RunModel.getInstance();
         SCE sce = MapLoader.load(PATH);
         if (sce == null) {
-            log.error("empty SCE file.");
+            log.error(empty_sce_error);
             return;
         }
         runModel.setSentences(sce.getSentences());
         runModel.setMP(FileScanner.searchForMP(PATH, sce.getMap("main")));
+        Character character = ConceptFactory.getInstance(Character.class);
+        character.setLocation(20, 400);
+        character.setName("RainNeverOver");
+        runModel.setCurrentCharacter(character);
         runModel.setCurrentPlayer(Player.getInstance());
         runModel.setStep(sce.getStart());
         Win.setRunModel();
-        log.log("initial game world with \"" + sce.getName() + "\" settings...");
+        log.log("基于 \"" + sce.getName() + "\" 设置初始化游戏世界完成...");
     }
 
-    private void doNext() {
-        BufferedScreen.write(runModel.getWords());
-    }
-
-    private void doAction(String buffer) {
+    private void doAction(String buffer, boolean flag) {
         int keyCode;
         try {
             keyCode = Integer.parseInt(buffer);
         } catch(NumberFormatException nfe) {
-            log.warning("input code not currently.");
+            log.warning(input_code_error);
             keyCode = 0;
         }
         switch(keyCode) {
             case KeyEvent.VK_UP:
+                runModel.setMove_up(flag);
+                break;
+            case KeyEvent.VK_LEFT:
+                runModel.setMove_left(flag);
+                break;
+            case KeyEvent.VK_DOWN:
+                runModel.setMove_down(flag);
+                break;
+            case KeyEvent.VK_RIGHT:
+                runModel.setMove_right(flag);
                 break;
         }
     }
 
-    public void flush() {
+    private void flush() {
         Win.flush();
     }
 
@@ -115,14 +124,15 @@ public class Dependence {
      * 0x3a 清空消息栏
      * 0x3b 清空当前缓冲区
      * 0x4a 接受键盘输入
-     * 0x4b 进行当前动作
+     * 0x4b 释放按键
+     * 0x7a 刷新屏幕
      * 0x9a 强制退出程序
      *
      * @param code interrupt code
      * @param buffer write into Buffer area
      */
-    public static void interrupt(int code, String buffer) {
-        log.log("interrupt code: " + code + " with buffer: " + (buffer == null ? "null" : buffer));
+    public static void interrupt(int code, Object buffer) {
+        if(buffer == null) buffer = "";
         switch (code) {
             case CLOSE_CURRENT_TASK:
                 TaskManager.getInstance().close(dependence.task);
@@ -131,25 +141,28 @@ public class Dependence {
                 TaskManager.getInstance().closeAll();
                 break;
             case PRINT_ALL_TASK:
-                TaskManager.getInstance().printAll();
+                TaskManager.printAll();
                 break;
             case PRINT_ALL_CONCEPT:
                 Proc.printAll();
                 break;
             case WRITE_TO_BUFFER:
-                BufferedScreen.write(buffer);
+                BufferedScreen.write(buffer.toString());
                 break;
             case CLEAR_MESSAGE:
                 break;
             case CLEAR_BUFFER:
                 BufferedScreen.clear();
                 break;
-            case DO_NEXT:
-                dependence.doNext();
-                dependence.flush();
+            case PRESS_KEY:
+                dependence.doAction(buffer.toString(), true);
+                interrupt(Interrupt.FLUSH_SCREEN);
                 break;
-            case DO_ACTION:
-                dependence.doAction(buffer);
+            case RELEASE_KEY:
+                dependence.doAction(buffer.toString(), false);
+                interrupt(Interrupt.FLUSH_SCREEN);
+                break;
+            case FLUSH_SCREEN:
                 dependence.flush();
                 break;
             case FORCE_EXIT:

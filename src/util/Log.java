@@ -80,7 +80,7 @@ public class Log {
     }
 
     public void format(String format, Object... obj) {
-        fmtPrint(format, obj);
+        fmtPrint(format + "\n", obj);
     }
 
     private void print(int level, int mode, Object obj) {

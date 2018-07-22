@@ -16,9 +16,11 @@ public interface Interrupt {
 
     int CLEAR_BUFFER = 0x3b;
 
-    int DO_NEXT = 0x4a;
+    int PRESS_KEY = 0x4a;
 
-    int DO_ACTION = 0x4b;
+    int RELEASE_KEY = 0x4b;
+
+    int FLUSH_SCREEN = 0x7a;
 
     int FORCE_EXIT = 0x9a;
 

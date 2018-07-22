@@ -1,8 +1,8 @@
-spell_holy_fire {
-SpellName=HolyFire
+spell_holy_light {
+SpellName=HolyLight
 SpellType=TARGET HURT
-SpellManaCost=30
-SpellNumber=60
+SpellManaCost=20
+SpellNumber=80
 }
 unit_main_character {
 UnitName=Allen

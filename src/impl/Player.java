@@ -6,7 +6,9 @@ import service.ConceptFactory;
 
 import java.awt.*;
 
-public class Player extends Instance {
+public final class Player extends Instance {
+
+    private static int num = 0;
 
     public Player() {
         setStatus(StatusType.STATUS_NON_SHOW);
@@ -20,7 +22,8 @@ public class Player extends Instance {
     }
 
     public void onCreate() {
-        setName("John Wick");
+        setName("Player " + num);
+        num++;
     }
 
 }

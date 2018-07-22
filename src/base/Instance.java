@@ -30,7 +30,7 @@ public abstract class Instance implements Concept, GameUnit, DefaultConstant {
     protected int y = 0;
     protected List<Spell> spell_list = new ArrayList<>(MAX_SPELL_NUMBER);
     protected int pack[][] = new int[DEFAULT_PACK_SIZE][2];
-    private int pack_usage = 0;
+    protected int pack_usage = 0;
 
     protected int ID = DEFAULT_ID;
 

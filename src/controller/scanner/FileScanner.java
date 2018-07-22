@@ -25,7 +25,7 @@ public class FileScanner {
     }
 
     public static SCE searchForSCE(String path, String filename) {
-        log.log("searching file for " + path + filename + SCE_SUFFIX + "...");
+        log.log("正在搜寻文件: " + path + filename + SCE_SUFFIX + "...");
         SCE sce = FileParser.parseSCE(path + filename + SCE_SUFFIX);
         PLR plr = searchForPLR(path + filename + PLR_SUFFIX);
         sce.setPlr(plr);

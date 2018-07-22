@@ -15,7 +15,7 @@ public class MP implements DefaultConstant {
 
     private Image background;
 
-    private Block list[][];
+    private final Block list[][];
 
     public MP(String name, Block[][] list) {
         this.name = name;
@@ -41,6 +41,10 @@ public class MP implements DefaultConstant {
 
     public Block get(int x, int y) {
         return list[x][y];
+    }
+
+    public Block[][] getList() {
+        return list;
     }
 
     @Override

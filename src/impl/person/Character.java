@@ -1,15 +1,28 @@
 package impl.person;
 
 import base.Instance;
+import service.AssetManager;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 public class Character extends Instance {
 
+    private BufferedImage char_image = AssetManager.getImage("main");
+
+    public BufferedImage getImage() {
+        return char_image;
+    }
+
+    public Character setImage(BufferedImage char_image) {
+        this.char_image = char_image;
+        return this;
+    }
+
     @Override
     public void paint(Graphics g) {
-
+        g.drawImage(char_image, x, y, CHARACTER_WIDTH, CHARACTER_HEIGHT, null);
     }
 
     @Override
@@ -30,7 +43,7 @@ public class Character extends Instance {
                 ", x=" + x +
                 ", y=" + y +
                 ", spell_list=" + spell_list +
-                ", pack=" + (pack == null ? null : Arrays.asList(pack)) +
+                ", pack=" + (pack == null ? null : Arrays.toString(pack)) +
                 ", ID=" + ID +
                 ", isUsed=" + isUsed +
                 ']';

@@ -1,6 +1,8 @@
 package screen;
 
 
+import controller.model.ImageDO;
+import resources.Strings;
 import service.TaskManager;
 import types.StatusType;
 import controller.dependence.Dependence;
@@ -9,9 +11,7 @@ import intf.Concept;
 import intf.constant.DefaultConstant;
 import controller.Exiter;
 import intf.constant.Interrupt;
-import service.AssetManager;
 import service.Proc;
-import util.DateUtil;
 import util.Log;
 
 import java.awt.*;
@@ -19,8 +19,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
-public class Win extends Frame implements DefaultConstant {
+public class Win extends Frame implements DefaultConstant, Strings {
 
     private static Log log = Log.getInstance(Win.class);
 
@@ -28,19 +29,21 @@ public class Win extends Frame implements DefaultConstant {
 
     private Image iBuffer;
 
+    private ArrayList<ImageDO> image_list = new ArrayList<>();
+
     private Graphics gBuffer;
 
     private RunModel runModel;
 
     private void init() {
-        log.log("initiate windows...");
+        log.log(initiate_windows);
         setBounds(200, 200, WIN_WIDTH, WIN_HEIGHT);
-        setTitle("MUD GAME");
+        setTitle(window_title);
         setResizable(false);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                log.log("closing windows...");
+                log.log(closing_windows);
                 Exiter.release();
             }
         });
@@ -48,17 +51,16 @@ public class Win extends Frame implements DefaultConstant {
         addKeyListener(new KeySolution());
         setLayout(null);
         TaskManager.getInstance().addTask((e) -> render(), DefaultConstant.FRAME_PER_SECOND, "FLUSH");
-        log.log("windows initiation complete.");
+        log.log(windows_initiation_complete);
     }
 
     public void paint(Graphics g) {
         g.setColor(Color.WHITE);
         if(runModel == null) return;
-        for(int i=1; i<MAX_MAP_SIZE_WIDTH; i++) {
-            for(int j=2; j<MAX_MAP_SIZE_HEIGHT; j++) {
-                Image image = AssetManager.getImage(runModel.getBlock(i, j).getImageName());
-                if(image == null) continue;
-                g.drawImage(image, i * DEFAULT_BLOCK_SIZE, j * DEFAULT_BLOCK_SIZE, DEFAULT_BLOCK_SIZE, DEFAULT_BLOCK_SIZE, null);
+        g.drawImage(runModel.getMap(), DEFAULT_BLOCK_SIZE, DEFAULT_BLOCK_SIZE, MAX_MAP_SIZE_WIDTH, MAX_MAP_SIZE_HEIGHT, null);
+        if(image_list.size() > 0) {
+            for(ImageDO image : image_list) {
+                g.drawImage(image.getImage(), image.getX(), image.getY(), image.getWidth(), image.getHeight(), null);
             }
         }
         Proc.conceptFilterSet(this::drawableCheck).forEach((e) -> e.paint(g));
@@ -80,6 +82,7 @@ public class Win extends Frame implements DefaultConstant {
     }
 
     private void render() {
+        if(runModel != null) runModel.checkStatus();
         repaint();
     }
 
@@ -97,17 +100,31 @@ public class Win extends Frame implements DefaultConstant {
             win.init();
         }
         else {
-            log.warning("not first of the call to this method, please do attention to this windows instance.");
+            log.warning(warning_windows_instance);
         }
         return win;
     }
 
     private class KeySolution extends KeyAdapter {
+
+
         @Override
         public void keyPressed(KeyEvent e) {
             switch(e.getKeyCode()) {
                 case KeyEvent.VK_ESCAPE:
                     Dependence.interrupt(Interrupt.PRINT_ALL_CONCEPT);
+                    break;
+                default:
+                    Dependence.interrupt(Interrupt.PRESS_KEY, String.valueOf(e.getKeyCode()));
+                    break;
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            switch(e.getKeyCode()) {
+                default:
+                    Dependence.interrupt(Interrupt.RELEASE_KEY, String.valueOf(e.getKeyCode()));
                     break;
             }
         }

@@ -44,6 +44,10 @@ public interface DefaultConstant {
 
     StatusType DEFAULT_STATUS = StatusType.STATUS_DEFAULT;
 
+    int CHARACTER_WIDTH = 20;
+
+    int CHARACTER_HEIGHT = 20;
+
     /**
      * WINDOWS PROPERTIES
      */
@@ -64,8 +68,8 @@ public interface DefaultConstant {
 
     int DEFAULT_BLOCK_SIZE = 20;
 
-    int MAX_MAP_SIZE_WIDTH = (WIN_WIDTH - 20)/DEFAULT_BLOCK_SIZE;//防止贴边
+    int MAX_MAP_SIZE_WIDTH = WIN_WIDTH - (DEFAULT_BLOCK_SIZE << 1);//防止贴边
 
-    int MAX_MAP_SIZE_HEIGHT = (WIN_HEIGHT - 20)/DEFAULT_BLOCK_SIZE;
+    int MAX_MAP_SIZE_HEIGHT = WIN_HEIGHT - (DEFAULT_BLOCK_SIZE << 1);
 
 }
