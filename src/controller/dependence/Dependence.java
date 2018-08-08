@@ -44,12 +44,9 @@ public class Dependence implements Strings {
     private void init() {
         log.log(initiate_system_core);
         try {
-            AssetManager.init();//调用资源管理器的初始化方法
             this.load();
             AudioManager.load("bgm", true);
-            TaskManager.getInstance().addTask((e) -> {
-                runModel.timePlus();
-            }, 1000, "TIME");//计数器方法
+            task = TaskManager.getInstance().addTask((e) -> runModel.timePlus(), 1000, "TIME");//计数器方法
             Proc.printAll();
         } catch(Exception e) {
             log.error(e);

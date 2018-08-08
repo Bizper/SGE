@@ -34,7 +34,7 @@ public class ConceptFactory {
     }
 
     public static <T extends Concept> int getInstanceID(Class<T> cls) {
-        log.log("接受到摸具为: " + cls);
+        log.log("接受到模具为: " + cls);
         DEFAULT_CLASS = cls;
         return getNewInstance().getID();
     }

@@ -112,7 +112,7 @@ public class Win extends Frame implements DefaultConstant, Strings {
         public void keyPressed(KeyEvent e) {
             switch(e.getKeyCode()) {
                 case KeyEvent.VK_ESCAPE:
-                    Dependence.interrupt(Interrupt.PRINT_ALL_CONCEPT);
+                    Dependence.interrupt(Interrupt.FORCE_EXIT);
                     break;
                 default:
                     Dependence.interrupt(Interrupt.PRESS_KEY, String.valueOf(e.getKeyCode()));

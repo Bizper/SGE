@@ -44,4 +44,8 @@ public interface Strings {
 
     String save_configs_complete = "保存配置文件完成.";
 
+    String merge_image = "开始拼接地图图像";
+
+    String merge_image_complete = "地图图像拼接完成";
+
 }

@@ -1,4 +1,4 @@
-.name main
+.name Charon
 .version 0.01
 .main true
 .mp main
