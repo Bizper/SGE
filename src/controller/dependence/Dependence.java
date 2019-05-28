@@ -84,6 +84,9 @@ public class Dependence implements Strings {
             keyCode = 0;
         }
         switch(keyCode) {
+            case KeyEvent.VK_F1:
+                if(flag) interrupt(PRINT_ALL_TASK);
+                break;
             case KeyEvent.VK_UP:
                 runModel.setMove_up(flag);
                 break;

@@ -63,7 +63,7 @@ public class ConceptFactory {
         String classUrl = ConfigUtil.getValue("default.model");
         Class<?> cls = null;//default model
         try {
-            log.log("正在搜索文件包: " + classUrl);
+            log.log("正在搜索实例类: " + classUrl);
             cls = ClassLoader.getSystemClassLoader().loadClass(classUrl);
         } catch (ClassNotFoundException e) {
             log.error(e);

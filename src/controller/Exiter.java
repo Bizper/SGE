@@ -26,7 +26,7 @@ public class Exiter implements Strings {
             System.exit(0);
         } else {
             log.warning("从" + className +  "发起了一次风险性的退出调用.");
-            System.exit(1);
+            System.exit(-1);
         }
     }
 

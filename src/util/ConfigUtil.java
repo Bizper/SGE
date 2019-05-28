@@ -20,7 +20,6 @@ public class ConfigUtil implements DefaultConstant, Strings {
     private static Log log = Log.getInstance(ConfigUtil.class);
 
     static {
-        CallCheck.checkCaller();
         try {
             log.log(load_properties);
             inputStream = ConfigUtil.class.getResourceAsStream("/config.properties");
@@ -34,7 +33,6 @@ public class ConfigUtil implements DefaultConstant, Strings {
      * 将constant内的常量保存到文件
      */
     public static void saveConstant() {
-        CallCheck.checkCaller();
         log.log(save_configs);
         Field fields[] = DefaultConstant.class.getFields();
         try {
@@ -50,19 +48,16 @@ public class ConfigUtil implements DefaultConstant, Strings {
     }
 
     public static String getValue(String key) {
-        CallCheck.checkCaller();
         return prop.getProperty(key);
     }
 
     public static int getValueAsInt(String key) {
-        CallCheck.checkCaller();
         String value = prop.getProperty(key);
         if(value == null || value.isEmpty()) return 0;
         else return Integer.parseInt(value);
     }
 
     public static double getValueAsDouble(String key) {
-        CallCheck.checkCaller();
         String value = prop.getProperty(key);
         if(value == null || value.isEmpty()) return 0.0;
         else return Double.parseDouble(value);

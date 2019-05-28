@@ -12,6 +12,7 @@ import javax.sound.sampled.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class AssetManager implements Strings {
 
@@ -41,7 +42,7 @@ public class AssetManager implements Strings {
                     Exiter.exit();
                 }
             }
-            for(String s : dir.list()) {
+            for(String s : Objects.requireNonNull(dir.list())) {
                 File file = new File(path + s);
                 if(file.isFile() && suffixCheck(s)) {
                     switch(getSuffix(s)) {

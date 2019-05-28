@@ -34,7 +34,7 @@ public class AudioManager implements Strings {
                 } catch(Exception e) {
                     log.error(e);
                 }
-            }, ais, 0, "正在播放: " + audioName);
+            }, ais, 0, "PLAYING: " + audioName);
         }
         else log.error(audio_not_load_error);
     }

@@ -13,7 +13,6 @@ public class ImageUtil implements DefaultConstant, Strings {
     private static Log log = Log.getInstance(ImageUtil.class);
 
     public static Image spliceImage(Block list[][]) {
-        CallCheck.checkCaller();
         log.log(merge_image);
         BufferedImage NewImage = new BufferedImage(MAX_MAP_SIZE_WIDTH, MAX_MAP_SIZE_HEIGHT, BufferedImage.TYPE_INT_RGB);
         Graphics g = NewImage.getGraphics();

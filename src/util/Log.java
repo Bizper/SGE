@@ -41,12 +41,12 @@ public class Log {
         return new Log(cls).setOutputMode(1).setOutputPath(path);
     }
 
-    public Log setOutputMode(int mode) {
+    private Log setOutputMode(int mode) {
         Log.mode = mode;
         return this;
     }
 
-    public Log setOutputPath(String path) {
+    private Log setOutputPath(String path) {
         this.path = path;
         file = new File(path + DateUtil.getDate() + ".log");
         return this;

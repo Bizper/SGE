@@ -115,7 +115,7 @@ public class Win extends Frame implements DefaultConstant, Strings {
                     Dependence.interrupt(Interrupt.FORCE_EXIT);
                     break;
                 default:
-                    Dependence.interrupt(Interrupt.PRESS_KEY, String.valueOf(e.getKeyCode()));
+                    Dependence.interrupt(Interrupt.PRESS_KEY, e.getKeyCode());
                     break;
             }
         }
@@ -124,7 +124,7 @@ public class Win extends Frame implements DefaultConstant, Strings {
         public void keyReleased(KeyEvent e) {
             switch(e.getKeyCode()) {
                 default:
-                    Dependence.interrupt(Interrupt.RELEASE_KEY, String.valueOf(e.getKeyCode()));
+                    Dependence.interrupt(Interrupt.RELEASE_KEY, e.getKeyCode());
                     break;
             }
         }
