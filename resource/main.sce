@@ -1,4 +1,4 @@
-.name Charon
+.name test
 .version 0.01
 .main true
 .mp main
@@ -7,4 +7,4 @@
 
 [0]finally, i research something
 [1]something that i could give birth to my wife.
-[2]someone told me, in a far away island, there are a wizard can help me.
+[2]someone told me, in a far away island, there is a wizard can help me.

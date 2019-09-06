@@ -45,7 +45,7 @@ public class Dependence implements Strings {
         log.log(initiate_system_core);
         try {
             this.load();
-            AudioManager.load("bgm", true);
+            AudioManager.load("cyper party", true);
             task = TaskManager.getInstance().addTask((e) -> runModel.timePlus(), 1000, "TIME");//计数器方法
             Proc.printAll();
         } catch(Exception e) {

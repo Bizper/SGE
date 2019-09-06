@@ -107,9 +107,9 @@ public class TaskManager implements Strings {
     public static void printAll() {
         log.log("");
         System.out.println("任务列表:");
-        log.format("%-5s%-20s%-10s", "ID", "NAME", "STATUS");
+        log.format("%-5s%-30s%-10s", "ID", "NAME", "STATUS");
         for(Tasker timer : list) {
-            log.format("%-5d%-20s%-10s", timer.getID(), timer.getTaskName(), (timer.isRunning() ? "RUNNING" : "STOP"));
+            log.format("%-5d%-30s%-10s", timer.getID(), timer.getTaskName(), (timer.isRunning() ? "RUNNING" : "STOP"));
         }
     }
 

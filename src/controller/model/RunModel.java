@@ -147,15 +147,15 @@ public class RunModel {
         return this;
     }
 
-    public RunModel setX(int x) {
+    private RunModel setX(int x) {
         currentLocation[0] = x;
-        currentCharacter.setLocation(x, currentCharacter.getLocation()[1]);
+        currentCharacter.setLocation(x, currentLocation[1]);
         return this;
     }
 
-    public RunModel setY(int y) {
+    private RunModel setY(int y) {
         currentLocation[1] = y;
-        currentCharacter.setLocation(currentCharacter.getLocation()[0], y);
+        currentCharacter.setLocation(currentLocation[0], y);
         return this;
     }
 
@@ -185,24 +185,20 @@ public class RunModel {
         return this;
     }
 
-    public RunModel moveUp() {
+    private void moveUp() {
         setY(getY() - (currentCharacter.getMoveSpeed() / FRAME_PER_SECOND));
-        return this;
     }
 
-    public RunModel moveLeft() {
+    private void moveLeft() {
         setX(getX() - (currentCharacter.getMoveSpeed() / FRAME_PER_SECOND));
-        return this;
     }
 
-    public RunModel moveDown() {
+    private void moveDown() {
         setY(getY() + (currentCharacter.getMoveSpeed() / FRAME_PER_SECOND));
-        return this;
     }
 
-    public RunModel moveRight() {
+    private void moveRight() {
         setX(getX() + (currentCharacter.getMoveSpeed() / FRAME_PER_SECOND));
-        return this;
     }
 
     @Override
